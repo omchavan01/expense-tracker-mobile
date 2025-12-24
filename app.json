@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "expense-tracker-mobile",
-    "slug": "expense-tracker-mobile",
+    "name": "Expense Tracker",
+    "slug": "expense-tracker",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -32,6 +32,13 @@
     "plugins": ["expo-router"],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "1bdab407-b3ad-4f15-a2e9-f9a12ed9a5c4"
+      }
+    },
+    "owner": "omchavan01"
   }
 }
