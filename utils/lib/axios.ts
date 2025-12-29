@@ -13,7 +13,7 @@ let getTokenFromContext:
 let handleUnauthorized: (() => void) | null = null;
 
 export const setTokenGetter = (
-  getter: () => { accessToken: string; refreshToken: string } | null,
+  getter: () => { accessToken: string; refreshToken: string } | null
 ) => {
   getTokenFromContext = getter;
 };
@@ -33,8 +33,8 @@ axiosInstance.interceptors.request.use(
     return config;
   },
   (error) => {
-    return Promise.reject(error instanceof Error ? error : new Error(error));
-  },
+    return Promise.reject(error);
+  }
 );
 
 axiosInstance.interceptors.response.use(
@@ -46,8 +46,8 @@ axiosInstance.interceptors.response.use(
         handleUnauthorized?.();
       }
     }
-    return Promise.reject(error instanceof Error ? error : new Error(error));
-  },
+    return Promise.reject(error);
+  }
 );
 
 export default axiosInstance;

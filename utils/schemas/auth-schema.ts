@@ -1,6 +1,11 @@
 import { z } from "zod";
 
-import { emailSchema, passwordSchema } from "./form-schema";
+import {
+  confirmPasswordSchema,
+  emailSchema,
+  otpSchema,
+  passwordSchema,
+} from "./form-schema";
 
 //Create Account Schema
 const createAccountSchema = z.object({
@@ -26,11 +31,55 @@ const defaultLoginValues: LoginType = {
   password: "",
 };
 
+//Verify OTP Schema
+const verifyOTPSchema = z.object({
+  email: emailSchema,
+  otp: otpSchema,
+});
+
+type VerifyOTPType = z.infer<typeof verifyOTPSchema>;
+
+const defaultVerifyOTPValues: VerifyOTPType = {
+  email: "",
+  otp: "",
+};
+
+//Set Password Schema
+const setPasswordSchema = z
+  .object({
+    email: emailSchema,
+    password: passwordSchema,
+    confirmPassword: confirmPasswordSchema,
+  })
+  .superRefine((data, ctx) => {
+    if (data.password !== data.confirmPassword) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Passwords do not match",
+        path: ["confirmPassword"],
+      });
+    }
+  });
+
+type SetPasswordType = z.infer<typeof setPasswordSchema>;
+
+const defaultSetPasswordValues: SetPasswordType = {
+  email: "",
+  password: "",
+  confirmPassword: "",
+};
+
 export {
-  createAccountSchema,
-  CreateAccountType,
   defaultCreateAccountValues,
-  loginSchema,
-  LoginType,
+  defaultVerifyOTPValues,
+  defaultSetPasswordValues,
   defaultLoginValues,
+  CreateAccountType,
+  VerifyOTPType,
+  SetPasswordType,
+  LoginType,
+  createAccountSchema,
+  verifyOTPSchema,
+  setPasswordSchema,
+  loginSchema,
 };

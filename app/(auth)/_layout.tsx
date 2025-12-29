@@ -9,6 +9,8 @@ export default function AuthLayout() {
       >
         <Stack.Screen name="index" />
         <Stack.Screen name="create-account" />
+        <Stack.Screen name="verify-otp" />
+        <Stack.Screen name="set-password" />
         <Stack.Screen name="login" />
       </Stack>
     </SafeAreaView>

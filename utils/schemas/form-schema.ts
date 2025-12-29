@@ -35,4 +35,21 @@ const passwordSchema = z
     message: "Password must contain at least one special character",
   });
 
-export { emailSchema, passwordSchema };
+const confirmPasswordSchema = z
+  .string()
+  .trim()
+  .refine((val) => val.length > 0, {
+    message: "Confirm password is required",
+  });
+
+const otpSchema = z
+  .string()
+  .trim()
+  .refine((val) => val.length > 0, {
+    message: "OTP is required",
+  })
+  .length(4, {
+    message: "OTP must be 4 digits long",
+  });
+
+export { confirmPasswordSchema, emailSchema, otpSchema, passwordSchema };

@@ -9,3 +9,10 @@ export interface FormControllerProps<T extends Record<string, string>> {
   isDisabled?: boolean;
   className?: string;
 }
+
+export interface ToastProps {
+  title: string;
+  description?: string;
+  type?: "success" | "error" | "warning" | "info" | "muted";
+  variant?: "solid" | "outline";
+}

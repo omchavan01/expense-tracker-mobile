@@ -1,5 +1,6 @@
-import { StatusBar, View, Text, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
+import { StatusBar, Text, View } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import FormController from "@/components/common/form-controller";
 import { Button, ButtonText } from "@/components/ui/button";
@@ -7,12 +8,16 @@ import useCreateAccount from "@/hooks/auth/use-create-account";
 
 const CreateAccount = () => {
   const router = useRouter();
-  const { control, handleSubmit, onSubmit } = useCreateAccount();
+  const { control, handleSubmit, onSubmit, isSubmitting } = useCreateAccount();
 
   return (
     <View className="flex-1 bg-white px-4">
       <StatusBar barStyle="dark-content" backgroundColor="#FFF" />
-      <ScrollView className="mt-10">
+      <KeyboardAwareScrollView
+        className="mt-10"
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ flexGrow: 1 }}
+      >
         <Text className="text-2xl font-bold mb-10">Create Account</Text>
         <FormController
           control={control}
@@ -20,13 +25,14 @@ const CreateAccount = () => {
           label="Email"
           placeholder="Enter email address"
         />
-      </ScrollView>
+      </KeyboardAwareScrollView>
       <View className="mb-10 w-full flex justify-center items-center">
         <Button
           onPress={handleSubmit(onSubmit)}
           variant="solid"
-          size="lg"
-          className="rounded-full bg-primary-700 w-[75%]"
+          size="xl"
+          className="rounded-full w-[75%] bg-primary-600"
+          disabled={isSubmitting}
         >
           <ButtonText size="md">Create Account</ButtonText>
         </Button>

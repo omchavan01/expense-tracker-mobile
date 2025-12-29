@@ -35,7 +35,10 @@ const FormController = <T extends Record<string, string>>({
           <FormControlLabel>
             <FormControlLabelText>{label}</FormControlLabelText>
           </FormControlLabel>
-          <Input isDisabled={isDisabled} className={cn("h-12", className)}>
+          <Input
+            isDisabled={isDisabled}
+            className={cn("h-14 rounded-lg", className)}
+          >
             <InputField
               placeholder={placeholder}
               value={field.value}

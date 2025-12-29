@@ -1,23 +1,52 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useRouter } from "expo-router";
 
 import {
   CreateAccountType,
   createAccountSchema,
   defaultCreateAccountValues,
 } from "@/utils/schemas/auth-schema";
+import axiosInstance from "@/utils/lib/axios";
+import { useShowToast } from "@/utils/lib/show-toast";
 
 const useCreateAccount = () => {
-  const { control, handleSubmit } = useForm<CreateAccountType>({
+  const router = useRouter();
+  const showToast = useShowToast();
+  const {
+    control,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm<CreateAccountType>({
     resolver: zodResolver(createAccountSchema),
     defaultValues: defaultCreateAccountValues,
   });
 
-  const onSubmit = (data: CreateAccountType) => {
-    console.log(data);
+  const onSubmit = async (payload: CreateAccountType) => {
+    try {
+      const { data } = await axiosInstance.post("/auth/send-otp", payload);
+      console.log(data);
+      showToast({
+        title: data.message,
+        type: "success",
+      });
+      router.push({
+        pathname: "/verify-otp",
+        params: { email: payload.email },
+      });
+    } catch (error: any) {
+      const errorMessage =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong";
+      showToast({
+        title: errorMessage,
+        type: "error",
+      });
+    }
   };
 
-  return { control, handleSubmit, onSubmit };
+  return { control, handleSubmit, onSubmit, isSubmitting };
 };
 
 export default useCreateAccount;

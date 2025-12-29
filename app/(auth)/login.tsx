@@ -1,5 +1,6 @@
-import { ScrollView, StatusBar, Text, View } from "react-native";
+import { StatusBar, Text, View } from "react-native";
 import { useRouter } from "expo-router";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { Button, ButtonText } from "@/components/ui/button";
 import FormController from "@/components/common/form-controller";
@@ -7,12 +8,16 @@ import useLogin from "@/hooks/auth/use-login";
 
 const Login = () => {
   const router = useRouter();
-  const { control, handleSubmit, onSubmit } = useLogin();
+  const { control, handleSubmit, onSubmit, isSubmitting } = useLogin();
 
   return (
     <View className="flex-1 bg-white px-4">
       <StatusBar barStyle="dark-content" backgroundColor="#FFF" />
-      <ScrollView className="mt-10">
+      <KeyboardAwareScrollView
+        className="mt-10"
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ flexGrow: 1 }}
+      >
         <Text className="text-2xl font-bold mb-10">Login</Text>
         <View className="flex flex-col gap-4">
           <FormController
@@ -29,13 +34,14 @@ const Login = () => {
             isPassword={true}
           />
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
       <View className="mb-10 w-full flex justify-center items-center">
         <Button
           onPress={handleSubmit(onSubmit)}
           variant="solid"
-          size="lg"
-          className="rounded-full bg-primary-700 w-[75%]"
+          size="xl"
+          className="rounded-full bg-primary-600 w-[75%]"
+          disabled={isSubmitting}
         >
           <ButtonText size="md">Login</ButtonText>
         </Button>

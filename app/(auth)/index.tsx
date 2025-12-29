@@ -1,6 +1,6 @@
+import { StatusBar, Text, View } from "react-native";
 import { useRouter } from "expo-router";
 import LottieView from "lottie-react-native";
-import { StatusBar, Text, View } from "react-native";
 
 import AuthAnimation from "@/assets/images/auth-animation.json";
 import { Button, ButtonText } from "@/components/ui/button";
