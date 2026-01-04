@@ -5,7 +5,7 @@ import LottieView from "lottie-react-native";
 import AuthAnimation from "@/assets/images/auth-animation.json";
 import { Button, ButtonText } from "@/components/ui/button";
 
-const Index = () => {
+const AuthIndex = () => {
   const router = useRouter();
 
   return (
@@ -49,10 +49,24 @@ const Index = () => {
               Login
             </ButtonText>
           </Button>
+          <Button
+            onPress={() => {
+              router.push({
+                pathname: "/(onboarding)",
+                params: {
+                  onboardingStep: "0",
+                },
+              });
+            }}
+          >
+            <ButtonText size="md" className="text-white">
+              Skip
+            </ButtonText>
+          </Button>
         </View>
       </View>
     </>
   );
 };
 
-export default Index;
+export default AuthIndex;

@@ -1,5 +1,5 @@
 import { Text, View } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 
 import FormController from "@/components/common/form-controller";
 import { Button, ButtonText } from "@/components/ui/button";
@@ -12,7 +12,8 @@ const SetPassword = () => {
       <KeyboardAwareScrollView
         className="mt-10"
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{ flexGrow: 1 }}
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
+        showsVerticalScrollIndicator={false}
       >
         <Text className="text-2xl font-bold mb-10">Set Your Password</Text>
         <View className="flex flex-col gap-4">
@@ -32,7 +33,7 @@ const SetPassword = () => {
           />
         </View>
       </KeyboardAwareScrollView>
-      <View className="mb-10 w-full flex justify-center items-center">
+      <View className="py-10 w-full flex justify-center items-center">
         <Button
           onPress={handleSubmit(onSubmit)}
           variant="solid"

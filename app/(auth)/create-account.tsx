@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import { StatusBar, Text, View } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 
 import FormController from "@/components/common/form-controller";
 import { Button, ButtonText } from "@/components/ui/button";
@@ -16,7 +16,8 @@ const CreateAccount = () => {
       <KeyboardAwareScrollView
         className="mt-10"
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{ flexGrow: 1 }}
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
+        showsVerticalScrollIndicator={false}
       >
         <Text className="text-2xl font-bold mb-10">Create Account</Text>
         <FormController
@@ -26,7 +27,7 @@ const CreateAccount = () => {
           placeholder="Enter email address"
         />
       </KeyboardAwareScrollView>
-      <View className="mb-10 w-full flex justify-center items-center">
+      <View className="py-10 w-full flex justify-center items-center">
         <Button
           onPress={handleSubmit(onSubmit)}
           variant="solid"

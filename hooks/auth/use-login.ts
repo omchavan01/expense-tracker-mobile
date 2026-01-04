@@ -6,7 +6,7 @@ import {
   loginSchema,
   LoginType,
   defaultLoginValues,
-} from "@/utils/schemas/auth-schema";
+} from "@/utils/schemas/auth/auth-schema";
 import axiosInstance from "@/utils/lib/axios";
 import { useShowToast } from "@/utils/lib/show-toast";
 import { useAuth } from "@/contexts/auth-provider";
@@ -14,7 +14,7 @@ import { useAuth } from "@/contexts/auth-provider";
 const useLogin = () => {
   const router = useRouter();
   const showToast = useShowToast();
-  const { login } = useAuth();
+  const { setAuthTokensAndExpiry } = useAuth();
   const {
     control,
     handleSubmit,
@@ -27,7 +27,7 @@ const useLogin = () => {
   const onSubmit = async (payload: LoginType) => {
     try {
       const { data } = await axiosInstance.post("/auth/login", payload);
-      login(
+      setAuthTokensAndExpiry(
         data.result.accessToken,
         data.result.refreshToken,
         data.result.accessTokenExpiresAt,
@@ -37,7 +37,14 @@ const useLogin = () => {
         title: data.message,
         type: "success",
       });
-      router.replace("/");
+      if (data.result.isOnboardingCompleted) router.replace("/(logged)");
+      else
+        router.replace({
+          pathname: "/(onboarding)",
+          params: {
+            onboardingStep: String(data.result.onboardingStep),
+          },
+        });
     } catch (error: any) {
       const errorMessage =
         error?.response?.data?.message ||

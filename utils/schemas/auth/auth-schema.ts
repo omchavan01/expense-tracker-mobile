@@ -1,10 +1,10 @@
 import { z } from "zod";
 
 import {
-  confirmPasswordSchema,
   emailSchema,
-  otpSchema,
   passwordSchema,
+  confirmPasswordSchema,
+  otpSchema,
 } from "./form-schema";
 
 //Create Account Schema

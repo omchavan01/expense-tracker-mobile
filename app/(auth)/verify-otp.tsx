@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { OtpInput } from "react-native-otp-entry";
 
 import { Button, ButtonText } from "@/components/ui/button";
@@ -50,7 +50,8 @@ const VerifyOTP = () => {
       <KeyboardAwareScrollView
         className="mt-10"
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{ flexGrow: 1 }}
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
+        showsVerticalScrollIndicator={false}
       >
         <Text className="text-2xl font-bold mb-12">Verify OTP</Text>
         <OtpInput
@@ -89,7 +90,7 @@ const VerifyOTP = () => {
           <Text className="text-error-500 mt-4">{errors.otp.message}</Text>
         )}
       </KeyboardAwareScrollView>
-      <View className="mb-10 w-full flex justify-center items-center">
+      <View className="py-10 w-full flex justify-center items-center">
         <Button
           onPress={handleSubmit(onVerifyOTP)}
           variant="solid"

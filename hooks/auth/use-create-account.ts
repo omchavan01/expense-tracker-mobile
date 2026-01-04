@@ -6,7 +6,7 @@ import {
   CreateAccountType,
   createAccountSchema,
   defaultCreateAccountValues,
-} from "@/utils/schemas/auth-schema";
+} from "@/utils/schemas/auth/auth-schema";
 import axiosInstance from "@/utils/lib/axios";
 import { useShowToast } from "@/utils/lib/show-toast";
 
@@ -25,7 +25,6 @@ const useCreateAccount = () => {
   const onSubmit = async (payload: CreateAccountType) => {
     try {
       const { data } = await axiosInstance.post("/auth/send-otp", payload);
-      console.log(data);
       showToast({
         title: data.message,
         type: "success",

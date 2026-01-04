@@ -6,7 +6,7 @@ import {
   VerifyOTPType,
   defaultVerifyOTPValues,
   verifyOTPSchema,
-} from "@/utils/schemas/auth-schema";
+} from "@/utils/schemas/auth/auth-schema";
 import axiosInstance from "@/utils/lib/axios";
 import { useShowToast } from "@/utils/lib/show-toast";
 

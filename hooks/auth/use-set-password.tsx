@@ -6,7 +6,7 @@ import {
   SetPasswordType,
   setPasswordSchema,
   defaultSetPasswordValues,
-} from "@/utils/schemas/auth-schema";
+} from "@/utils/schemas/auth/auth-schema";
 import axiosInstance from "@/utils/lib/axios";
 import { useShowToast } from "@/utils/lib/show-toast";
 import { useAuth } from "@/contexts/auth-provider";
@@ -15,7 +15,7 @@ const useSetPassword = () => {
   const { email } = useLocalSearchParams<{ email: string }>();
   const router = useRouter();
   const showToast = useShowToast();
-  const { login } = useAuth();
+  const { setAuthTokensAndExpiry } = useAuth();
 
   const {
     control,
@@ -33,14 +33,19 @@ const useSetPassword = () => {
         title: data.message,
         type: "success",
       });
-      login(
+      setAuthTokensAndExpiry(
         data.result.accessToken,
         data.result.refreshToken,
         data.result.accessTokenExpiresAt,
         data.result.refreshTokenExpiresAt
       );
 
-      router.replace("/");
+      router.replace({
+        pathname: "/(onboarding)",
+        params: {
+          onboardingStep: String(data.result.onboardingStep),
+        },
+      });
     } catch (error: any) {
       const errorMessage =
         error?.response?.data?.message ||

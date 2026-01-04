@@ -7,12 +7,13 @@ import {
   FormControlErrorIcon,
   FormControlErrorText,
   FormControlLabel,
+  FormControlLabelAstrick,
   FormControlLabelText,
 } from "@/components/ui/form-control";
 import { Input, InputField, InputIcon } from "../ui/input";
 import { EyeIcon, EyeOffIcon, AlertCircleIcon } from "../ui/icon";
-import { FormControllerProps } from "@/utils/types";
-import { cn } from "@/utils/cn";
+import { FormControllerProps } from "@/utils/lib/types";
+import { cn } from "@/utils/lib/cn";
 import { Pressable } from "react-native";
 
 const FormController = <T extends Record<string, string>>({
@@ -20,6 +21,7 @@ const FormController = <T extends Record<string, string>>({
   name,
   label,
   placeholder,
+  isMandatory = true,
   isPassword = false,
   isDisabled,
   className,
@@ -34,6 +36,11 @@ const FormController = <T extends Record<string, string>>({
         <FormControl isInvalid={!!fieldState.error}>
           <FormControlLabel>
             <FormControlLabelText>{label}</FormControlLabelText>
+            {isMandatory && (
+              <FormControlLabelAstrick className="text-red-500">
+                {" *"}
+              </FormControlLabelAstrick>
+            )}
           </FormControlLabel>
           <Input
             isDisabled={isDisabled}
