@@ -1,3 +1,4 @@
+import BottomSheet from "@gorhom/bottom-sheet";
 import { Control, Path } from "react-hook-form";
 
 export interface BaseControllerProps<T extends Record<string, any>> {
@@ -9,20 +10,32 @@ export interface BaseControllerProps<T extends Record<string, any>> {
   isDisabled?: boolean;
   className?: string;
 }
-export interface FormControllerProps<T extends Record<string, any>>
-  extends BaseControllerProps<T> {
+export interface FormControllerProps<
+  T extends Record<string, any>,
+> extends BaseControllerProps<T> {
   isPassword?: boolean;
 }
 
-export interface DropdownControllerProps<T extends Record<string, any>>
-  extends BaseControllerProps<T> {
-  showDropdown: boolean;
-  setShowDropdown: (show: boolean) => void;
+export interface DropdownControllerProps<
+  T extends Record<string, any>,
+> extends BaseControllerProps<T> {
+  bottomSheetRef: React.RefObject<BottomSheet | null>;
+  options: DropdownOption[];
 }
 
 export interface DropdownOption {
   label: string;
   value: string;
+}
+
+export interface DropdownSheetProps<T> {
+  bottomSheetRef: React.RefObject<BottomSheet | null>;
+  snapPointsList: string[];
+  options: DropdownOption[];
+  selectedValue: T;
+  onSelect: (value: T) => void;
+  title: string;
+  scrollEnabled: boolean;
 }
 
 export interface ToastProps {

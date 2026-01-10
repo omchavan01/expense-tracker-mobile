@@ -53,20 +53,6 @@ const AuthIndex = () => {
               Login
             </ButtonText>
           </Button>
-          <Button
-            onPress={() => {
-              router.push({
-                pathname: "/(onboarding)",
-                params: {
-                  onboardingStep: "0",
-                },
-              });
-            }}
-          >
-            <ButtonText size="md" className="text-white">
-              Skip
-            </ButtonText>
-          </Button>
         </View>
       </View>
     </>

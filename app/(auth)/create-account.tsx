@@ -2,7 +2,7 @@ import { useRouter } from "expo-router";
 import { StatusBar, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 
-import FormController from "@/components/common/form-controller";
+import FormController from "@/components/common/controllers/form-controller";
 import { Button, ButtonText } from "@/components/ui/button";
 import useCreateAccount from "@/hooks/auth/use-create-account";
 

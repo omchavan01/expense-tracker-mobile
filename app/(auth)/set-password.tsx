@@ -1,7 +1,7 @@
 import { Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 
-import FormController from "@/components/common/form-controller";
+import FormController from "@/components/common/controllers/form-controller";
 import { Button, ButtonText } from "@/components/ui/button";
 import useSetPassword from "@/hooks/auth/use-set-password";
 import { useHaptics } from "@/utils/lib/haptics";

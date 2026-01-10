@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { TouchableOpacity } from "react-native";
 import { Controller } from "react-hook-form";
 
 import {
@@ -10,13 +11,12 @@ import {
   FormControlLabelAstrick,
   FormControlLabelText,
 } from "@/components/ui/form-control";
-import { Input, InputField, InputIcon } from "../ui/input";
-import { EyeIcon, EyeOffIcon, AlertCircleIcon } from "../ui/icon";
+import { Input, InputField, InputIcon } from "@/components/ui/input";
+import { AlertCircleIcon, EyeIcon, EyeOffIcon } from "@/components/ui/icon";
 import { FormControllerProps } from "@/utils/lib/types";
 import { cn } from "@/utils/lib/cn";
-import { Pressable } from "react-native";
 
-const FormController = <T extends Record<string, string>>({
+const FormController = <T extends Record<string, any>>({
   control,
   name,
   label,
@@ -54,12 +54,12 @@ const FormController = <T extends Record<string, string>>({
               secureTextEntry={isPassword && !showPassword}
             />
             {isPassword && (
-              <Pressable
+              <TouchableOpacity
                 onPress={() => setShowPassword(!showPassword)}
                 className="absolute right-2"
               >
                 <InputIcon as={showPassword ? EyeIcon : EyeOffIcon} size="sm" />
-              </Pressable>
+              </TouchableOpacity>
             )}
           </Input>
 

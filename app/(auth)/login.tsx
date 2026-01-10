@@ -3,7 +3,7 @@ import { useRouter } from "expo-router";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 
 import { Button, ButtonText } from "@/components/ui/button";
-import FormController from "@/components/common/form-controller";
+import FormController from "@/components/common/controllers/form-controller";
 import useLogin from "@/hooks/auth/use-login";
 import { useHaptics } from "@/utils/lib/haptics";
 

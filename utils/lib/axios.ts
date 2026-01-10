@@ -13,7 +13,7 @@ let getTokenFromContext:
 let handleUnauthorized: (() => void) | null = null;
 
 export const setTokenGetter = (
-  getter: () => { accessToken: string; refreshToken: string } | null
+  getter: () => { accessToken: string; refreshToken: string } | null,
 ) => {
   getTokenFromContext = getter;
 };
@@ -34,20 +34,20 @@ axiosInstance.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     if (error.response?.status === 401) {
-      const errorMessage = error.response?.data?.message ?? "";
-      if (errorMessage.toLowerCase().includes("token expired")) {
+      const errorMessage = error?.response?.data?.message || error?.message;
+      if (errorMessage.toLowerCase().includes("Invalid or expired token")) {
         handleUnauthorized?.();
       }
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export default axiosInstance;
