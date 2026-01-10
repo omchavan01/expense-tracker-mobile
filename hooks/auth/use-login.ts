@@ -10,10 +10,12 @@ import {
 import axiosInstance from "@/utils/lib/axios";
 import { useShowToast } from "@/utils/lib/show-toast";
 import { useAuth } from "@/contexts/auth-provider";
+import { useHaptics } from "@/utils/lib/haptics";
 
 const useLogin = () => {
   const router = useRouter();
   const showToast = useShowToast();
+  const { notificationHaptics } = useHaptics();
   const { setAuthTokensAndExpiry } = useAuth();
   const {
     control,
@@ -37,6 +39,7 @@ const useLogin = () => {
         title: data.message,
         type: "success",
       });
+      notificationHaptics("success");
       if (data.result.isOnboardingCompleted) router.replace("/(logged)");
       else
         router.replace({
@@ -54,6 +57,7 @@ const useLogin = () => {
         title: errorMessage,
         type: "error",
       });
+      notificationHaptics("error");
     }
   };
 

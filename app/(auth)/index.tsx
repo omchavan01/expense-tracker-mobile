@@ -4,9 +4,11 @@ import LottieView from "lottie-react-native";
 
 import AuthAnimation from "@/assets/images/auth-animation.json";
 import { Button, ButtonText } from "@/components/ui/button";
+import { useHaptics } from "@/utils/lib/haptics";
 
 const AuthIndex = () => {
   const router = useRouter();
+  const { impactHaptics } = useHaptics();
 
   return (
     <>
@@ -32,6 +34,7 @@ const AuthIndex = () => {
             onPress={() => {
               router.push("/create-account");
             }}
+            onPressIn={() => impactHaptics("light")}
           >
             <ButtonText size="md" className="text-white">
               Create Account
@@ -44,6 +47,7 @@ const AuthIndex = () => {
             onPress={() => {
               router.push("/login");
             }}
+            onPressIn={() => impactHaptics("light")}
           >
             <ButtonText size="md" className="text-white">
               Login

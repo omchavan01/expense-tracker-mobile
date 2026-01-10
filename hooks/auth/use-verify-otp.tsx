@@ -9,12 +9,13 @@ import {
 } from "@/utils/schemas/auth/auth-schema";
 import axiosInstance from "@/utils/lib/axios";
 import { useShowToast } from "@/utils/lib/show-toast";
+import { useHaptics } from "@/utils/lib/haptics";
 
 const useVerifyOTP = () => {
   const { email } = useLocalSearchParams<{ email: string }>();
   const router = useRouter();
   const showToast = useShowToast();
-
+  const { notificationHaptics } = useHaptics();
   const {
     handleSubmit,
     setValue,
@@ -52,6 +53,7 @@ const useVerifyOTP = () => {
         title: errorMessage,
         type: "error",
       });
+      notificationHaptics("error");
     }
   };
 

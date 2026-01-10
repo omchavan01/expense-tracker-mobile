@@ -4,9 +4,12 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import FormController from "@/components/common/form-controller";
 import { Button, ButtonText } from "@/components/ui/button";
 import useSetPassword from "@/hooks/auth/use-set-password";
+import { useHaptics } from "@/utils/lib/haptics";
 
 const SetPassword = () => {
   const { control, handleSubmit, onSubmit, isSubmitting } = useSetPassword();
+  const { impactHaptics } = useHaptics();
+
   return (
     <View className="flex-1 bg-white px-4">
       <KeyboardAwareScrollView
@@ -36,6 +39,7 @@ const SetPassword = () => {
       <View className="py-10 w-full flex justify-center items-center">
         <Button
           onPress={handleSubmit(onSubmit)}
+          onPressIn={() => impactHaptics("light")}
           variant="solid"
           size="xl"
           className="rounded-full bg-primary-600 w-[75%]"

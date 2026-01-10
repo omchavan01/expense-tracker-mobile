@@ -9,10 +9,12 @@ import {
 } from "@/utils/schemas/auth/auth-schema";
 import axiosInstance from "@/utils/lib/axios";
 import { useShowToast } from "@/utils/lib/show-toast";
+import { useHaptics } from "@/utils/lib/haptics";
 
 const useCreateAccount = () => {
   const router = useRouter();
   const showToast = useShowToast();
+  const { notificationHaptics } = useHaptics();
   const {
     control,
     handleSubmit,
@@ -42,6 +44,7 @@ const useCreateAccount = () => {
         title: errorMessage,
         type: "error",
       });
+      notificationHaptics("error");
     }
   };
 

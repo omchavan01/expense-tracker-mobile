@@ -10,13 +10,14 @@ import {
 import axiosInstance from "@/utils/lib/axios";
 import { useShowToast } from "@/utils/lib/show-toast";
 import { useAuth } from "@/contexts/auth-provider";
+import { useHaptics } from "@/utils/lib/haptics";
 
 const useSetPassword = () => {
   const { email } = useLocalSearchParams<{ email: string }>();
   const router = useRouter();
   const showToast = useShowToast();
   const { setAuthTokensAndExpiry } = useAuth();
-
+  const { notificationHaptics } = useHaptics();
   const {
     control,
     handleSubmit,
@@ -33,6 +34,7 @@ const useSetPassword = () => {
         title: data.message,
         type: "success",
       });
+      notificationHaptics("success");
       setAuthTokensAndExpiry(
         data.result.accessToken,
         data.result.refreshToken,
@@ -55,6 +57,7 @@ const useSetPassword = () => {
         title: errorMessage,
         type: "error",
       });
+      notificationHaptics("error");
     }
   };
 
