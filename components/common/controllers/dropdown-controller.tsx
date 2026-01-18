@@ -77,14 +77,16 @@ const DropdownController = <T extends Record<string, any>>({
 
               <Pressable
                 onPress={() => {
+                  Keyboard.dismiss();
+                  impactHaptics("light");
                   bottomSheetRef.current?.expand();
                 }}
                 onPressIn={() => {
-                  Keyboard.dismiss();
                   setIsPressed(true);
-                  impactHaptics("light");
                 }}
-                onPressOut={() => setIsPressed(false)}
+                onPressOut={() => {
+                  setIsPressed(false);
+                }}
                 disabled={isDisabled}
                 className="absolute top-0 left-0 right-0 bottom-0"
               />

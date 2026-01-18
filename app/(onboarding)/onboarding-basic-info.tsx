@@ -3,16 +3,18 @@ import React, { useRef } from "react";
 import { Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 
+import { Button, ButtonText } from "@/components/ui/button";
 import DateController from "@/components/common/controllers/date-controller";
 import DropdownController from "@/components/common/controllers/dropdown-controller";
 import FormController from "@/components/common/controllers/form-controller";
 import DropdownSheet from "@/components/common/sheet/dropdown-sheet";
-import { Button, ButtonText } from "@/components/ui/button";
+import NoInternet from "@/components/common/no-internet";
 import useOnboardingBasicInfo from "@/hooks/onboarding/use-basic-info";
+import { useNetInfo } from "@/contexts/net-info-provider";
 
 const OnboardingBasicInfo = () => {
   const bottomSheetRef = useRef<BottomSheet>(null);
-
+  const { isConnected } = useNetInfo();
   const {
     control,
     handleSubmit,
@@ -69,7 +71,7 @@ const OnboardingBasicInfo = () => {
             variant="solid"
             size="xl"
             className="rounded-full bg-primary-600 w-[75%]"
-            disabled={isSubmitting}
+            disabled={isSubmitting || !isConnected}
           >
             <ButtonText size="md">Continue</ButtonText>
           </Button>
@@ -82,8 +84,8 @@ const OnboardingBasicInfo = () => {
         title="Select Gender"
         selectedValue={genderValue!}
         onSelect={handleGenderSelect}
-        scrollEnabled={false}
       />
+      {!isConnected && <NoInternet text="completing your basic details" />}
     </>
   );
 };

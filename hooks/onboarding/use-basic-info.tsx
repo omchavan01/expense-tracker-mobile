@@ -1,17 +1,17 @@
 import { useCallback, useMemo } from "react";
+import { useRouter } from "expo-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "expo-router";
 
+import axiosInstance from "@/utils/lib/axios";
 import {
   defaultOnboardingBasicInfoValues,
   onboardingBasicInfoSchema,
   OnboardingBasicInfoType,
 } from "@/utils/schemas/onboarding/onboarding-schema";
-import axiosInstance from "@/utils/lib/axios";
 import { GenderEnum } from "@/utils/enum/gender-enum";
-import { useShowToast } from "@/utils/lib/show-toast";
 import { useHaptics } from "@/utils/lib/haptics";
+import { useShowToast } from "@/utils/lib/show-toast";
 
 const useOnboardingBasicInfo = () => {
   const router = useRouter();
@@ -37,11 +37,20 @@ const useOnboardingBasicInfo = () => {
     [setValue]
   );
 
+  const formatDateToYYYYMMDD = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
   const onSubmit = async (payload: OnboardingBasicInfoType) => {
     const formattedPayload = {
       basicInfo: {
         ...payload,
-        dateOfBirth: payload?.dateOfBirth?.toISOString().split("T")[0],
+        dateOfBirth: payload?.dateOfBirth
+          ? formatDateToYYYYMMDD(payload.dateOfBirth)
+          : undefined,
       },
     };
     try {

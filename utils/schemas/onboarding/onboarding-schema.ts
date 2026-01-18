@@ -5,6 +5,11 @@ import {
   lastNameSchema,
   dateOfBirthSchema,
   genderSchema,
+  jobTitleSchema,
+  companyNameSchema,
+  countrySchema,
+  incomeCycleSchema,
+  incomeSchema,
 } from "./form-schema";
 
 const onboardingBasicInfoSchema = z.object({
@@ -23,8 +28,31 @@ const defaultOnboardingBasicInfoValues: OnboardingBasicInfoType = {
   gender: undefined,
 };
 
+const onboardingOccupationInfoSchema = z.object({
+  jobTitle: jobTitleSchema,
+  companyName: companyNameSchema,
+  country: countrySchema,
+  incomeCycle: incomeCycleSchema,
+  income: incomeSchema,
+});
+
+type OnboardingOccupationInfoType = z.infer<
+  typeof onboardingOccupationInfoSchema
+>;
+
+const defaultOnboardingOccupationInfoValues: OnboardingOccupationInfoType = {
+  jobTitle: "",
+  companyName: "",
+  country: "",
+  incomeCycle: undefined,
+  income: "",
+};
+
 export {
-  defaultOnboardingBasicInfoValues,
   onboardingBasicInfoSchema,
+  onboardingOccupationInfoSchema,
   OnboardingBasicInfoType,
+  OnboardingOccupationInfoType,
+  defaultOnboardingBasicInfoValues,
+  defaultOnboardingOccupationInfoValues,
 };

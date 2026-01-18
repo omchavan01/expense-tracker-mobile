@@ -1,5 +1,8 @@
-import { GenderEnum } from "@/utils/enum/gender-enum";
 import { z } from "zod";
+
+import { GenderEnum } from "@/utils/enum/gender-enum";
+import { IncomeCycleEnum } from "@/utils/enum/income-cycle-enum";
+import { countryList } from "@/assets/json/country-list";
 
 const firstNameSchema = z.string().trim().min(1, {
   message: "First name is required",
@@ -11,7 +14,7 @@ const dateOfBirthSchema = z
   .date()
   .optional()
   .refine((val) => val !== undefined, {
-    message: "Please select a date of birth",
+    message: "Please select a date",
   })
   .refine(
     (val) => {
@@ -49,4 +52,56 @@ const genderSchema = z
     message: "Please select a gender",
   });
 
-export { firstNameSchema, lastNameSchema, dateOfBirthSchema, genderSchema };
+const jobTitleSchema = z.string().trim().min(1, {
+  message: "Job title is required",
+});
+
+const companyNameSchema = z.string().trim().min(1, {
+  message: "Company name is required",
+});
+
+const countrySchema = z
+  .enum(countryList.map((country) => country.value))
+  .optional()
+  .refine((val) => val !== undefined, {
+    message: "Please select a country",
+  });
+
+const incomeCycleSchema = z
+  .enum([
+    IncomeCycleEnum.DAILY,
+    IncomeCycleEnum.WEEKLY,
+    IncomeCycleEnum.BIWEEKLY,
+    IncomeCycleEnum.MONTHLY,
+    IncomeCycleEnum.QUARTERLY,
+    IncomeCycleEnum.YEARLY,
+  ])
+  .optional()
+  .refine((val) => val !== undefined, {
+    message: "Please select an income cycle",
+  });
+
+const incomeSchema = z
+  .string()
+  .trim()
+  .min(1, {
+    message: "Income amount is required",
+  })
+  .refine((val) => Number(val) > 0, {
+    message: "Income amount must be greater than 0",
+  })
+  .refine((val) => Number(val) < 1000000000, {
+    message: "Income amount must be less than 1 billion",
+  });
+
+export {
+  firstNameSchema,
+  lastNameSchema,
+  dateOfBirthSchema,
+  genderSchema,
+  jobTitleSchema,
+  companyNameSchema,
+  countrySchema,
+  incomeCycleSchema,
+  incomeSchema,
+};
