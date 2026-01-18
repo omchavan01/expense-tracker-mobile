@@ -4,51 +4,58 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 
 import FormController from "@/components/common/controllers/form-controller";
 import { Button, ButtonText } from "@/components/ui/button";
+import NoInternet from "@/components/common/no-internet";
 import useCreateAccount from "@/hooks/auth/use-create-account";
+import { useNetInfo } from "@/contexts/net-info-provider";
 
 const CreateAccount = () => {
   const router = useRouter();
+  const { isConnected } = useNetInfo();
   const { control, handleSubmit, onSubmit, isSubmitting } = useCreateAccount();
 
   return (
-    <View className="flex-1 bg-white px-4">
-      <StatusBar barStyle="dark-content" backgroundColor="#FFF" />
-      <KeyboardAwareScrollView
-        className="mt-10"
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
-        showsVerticalScrollIndicator={false}
-      >
-        <Text className="text-2xl font-bold mb-10">Create Account</Text>
-        <FormController
-          control={control}
-          name="email"
-          label="Email"
-          placeholder="Enter email address"
-        />
-      </KeyboardAwareScrollView>
-      <View className="py-10 w-full flex justify-center items-center">
-        <Button
-          onPress={handleSubmit(onSubmit)}
-          variant="solid"
-          size="xl"
-          className="rounded-full w-[75%] bg-primary-600"
-          disabled={isSubmitting}
+    <>
+      <View className="flex-1 bg-white px-4">
+        <StatusBar barStyle="dark-content" backgroundColor="#FFF" />
+        <KeyboardAwareScrollView
+          className="mt-10"
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
+          showsVerticalScrollIndicator={false}
         >
-          <ButtonText size="md">Create Account</ButtonText>
-        </Button>
-        <Button
-          onPress={() => {
-            router.push("/login");
-          }}
-          variant="link"
-        >
-          <ButtonText size="xs" className="text-typography-400">
-            Already have an account? Login
-          </ButtonText>
-        </Button>
+          <Text className="text-2xl font-bold mb-10">Create Account</Text>
+          <FormController
+            control={control}
+            name="email"
+            label="Email"
+            placeholder="Enter email address"
+          />
+        </KeyboardAwareScrollView>
+        <View className="py-10 w-full flex justify-center items-center">
+          <Button
+            onPress={handleSubmit(onSubmit)}
+            variant="solid"
+            size="xl"
+            className="rounded-full w-[75%] bg-primary-600"
+            disabled={isSubmitting || !isConnected}
+          >
+            <ButtonText size="md">Create Account</ButtonText>
+          </Button>
+          <Button
+            onPress={() => {
+              router.push("/login");
+            }}
+            variant="link"
+            disabled={!isConnected}
+          >
+            <ButtonText size="xs" className="text-typography-400">
+              Already have an account? Login
+            </ButtonText>
+          </Button>
+        </View>
       </View>
-    </View>
+      {!isConnected && <NoInternet text="creating your account" />}
+    </>
   );
 };
 

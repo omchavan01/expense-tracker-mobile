@@ -4,11 +4,14 @@ import LottieView from "lottie-react-native";
 
 import AuthAnimation from "@/assets/images/auth-animation.json";
 import { Button, ButtonText } from "@/components/ui/button";
+import NoInternet from "@/components/common/no-internet";
 import { useHaptics } from "@/utils/lib/haptics";
+import { useNetInfo } from "@/contexts/net-info-provider";
 
 const AuthIndex = () => {
   const router = useRouter();
   const { impactHaptics } = useHaptics();
+  const { isConnected } = useNetInfo();
 
   return (
     <>
@@ -34,6 +37,7 @@ const AuthIndex = () => {
             onPress={() => {
               router.push("/create-account");
             }}
+            disabled={!isConnected}
             onPressIn={() => impactHaptics("light")}
           >
             <ButtonText size="md" className="text-white">
@@ -47,6 +51,7 @@ const AuthIndex = () => {
             onPress={() => {
               router.push("/login");
             }}
+            disabled={!isConnected}
             onPressIn={() => impactHaptics("light")}
           >
             <ButtonText size="md" className="text-white">
@@ -55,6 +60,7 @@ const AuthIndex = () => {
           </Button>
         </View>
       </View>
+      {!isConnected && <NoInternet />}
     </>
   );
 };

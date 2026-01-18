@@ -4,7 +4,9 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { OtpInput } from "react-native-otp-entry";
 
 import { Button, ButtonText } from "@/components/ui/button";
+import NoInternet from "@/components/common/no-internet";
 import useVerifyOTP from "@/hooks/auth/use-verify-otp";
+import { useNetInfo } from "@/contexts/net-info-provider";
 
 const OTP_COLORS = {
   border: "rgb(210, 210, 210)",
@@ -14,6 +16,7 @@ const OTP_COLORS = {
 };
 
 const VerifyOTP = () => {
+  const { isConnected } = useNetInfo();
   const {
     handleSubmit,
     onVerifyOTP,
@@ -23,7 +26,6 @@ const VerifyOTP = () => {
     isSubmitting,
     handleResendOTP,
   } = useVerifyOTP();
-
   const [timer, setTimer] = useState("3:00");
 
   useEffect(() => {
@@ -46,81 +48,84 @@ const VerifyOTP = () => {
   }, []);
 
   return (
-    <View className="flex-1 bg-white px-4">
-      <KeyboardAwareScrollView
-        className="mt-10"
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
-        showsVerticalScrollIndicator={false}
-      >
-        <Text className="text-2xl font-bold mb-12">Verify OTP</Text>
-        <OtpInput
-          numberOfDigits={4}
-          onTextChange={(value) => {
-            setValue("otp", value);
-            if (errors.otp) {
-              clearErrors("otp");
-            }
-          }}
-          theme={{
-            pinCodeContainerStyle: {
-              width: 60,
-              height: 60,
-              borderRadius: 12,
-              borderWidth: 1.5,
-              backgroundColor: "#FFFFFF",
-              borderColor: errors.otp ? OTP_COLORS.error : OTP_COLORS.border,
-            },
-            focusedPinCodeContainerStyle: {
-              borderWidth: 2,
-              borderColor: errors.otp ? OTP_COLORS.error : OTP_COLORS.primary,
-            },
-            pinCodeTextStyle: {
-              fontSize: 24,
-              color: OTP_COLORS.text,
-            },
-            focusStickStyle: {
-              backgroundColor: errors.otp
-                ? OTP_COLORS.error
-                : OTP_COLORS.primary,
-            },
-          }}
-        />
-        {errors.otp && (
-          <Text className="text-error-500 mt-4">{errors.otp.message}</Text>
-        )}
-      </KeyboardAwareScrollView>
-      <View className="py-10 w-full flex justify-center items-center">
-        <Button
-          onPress={handleSubmit(onVerifyOTP)}
-          variant="solid"
-          size="xl"
-          className="rounded-full bg-primary-600 w-[75%]"
-          disabled={isSubmitting}
+    <>
+      <View className="flex-1 bg-white px-4">
+        <KeyboardAwareScrollView
+          className="mt-10"
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
+          showsVerticalScrollIndicator={false}
         >
-          <ButtonText size="md">Verify OTP</ButtonText>
-        </Button>
-
-        <Button
-          onPress={() => {
-            handleResendOTP();
-            setTimer("3:00");
-          }}
-          variant="link"
-          disabled={timer !== "0:00"}
-        >
-          {timer === "0:00" ? (
-            <ButtonText size="xs" className="text-typography-400">
-              Did not receive the OTP? Resend
-            </ButtonText>
-          ) : (
-            <ButtonText size="xs" className="text-typography-400">
-              Did not receive the OTP? Resend in {timer}
-            </ButtonText>
+          <Text className="text-2xl font-bold mb-12">Verify OTP</Text>
+          <OtpInput
+            numberOfDigits={4}
+            onTextChange={(value) => {
+              setValue("otp", value);
+              if (errors.otp) {
+                clearErrors("otp");
+              }
+            }}
+            theme={{
+              pinCodeContainerStyle: {
+                width: 60,
+                height: 60,
+                borderRadius: 12,
+                borderWidth: 1.5,
+                backgroundColor: "#FFFFFF",
+                borderColor: errors.otp ? OTP_COLORS.error : OTP_COLORS.border,
+              },
+              focusedPinCodeContainerStyle: {
+                borderWidth: 2,
+                borderColor: errors.otp ? OTP_COLORS.error : OTP_COLORS.primary,
+              },
+              pinCodeTextStyle: {
+                fontSize: 24,
+                color: OTP_COLORS.text,
+              },
+              focusStickStyle: {
+                backgroundColor: errors.otp
+                  ? OTP_COLORS.error
+                  : OTP_COLORS.primary,
+              },
+            }}
+          />
+          {errors.otp && (
+            <Text className="text-error-500 mt-4">{errors.otp.message}</Text>
           )}
-        </Button>
+        </KeyboardAwareScrollView>
+        <View className="py-10 w-full flex justify-center items-center">
+          <Button
+            onPress={handleSubmit(onVerifyOTP)}
+            variant="solid"
+            size="xl"
+            className="rounded-full bg-primary-600 w-[75%]"
+            disabled={isSubmitting || !isConnected}
+          >
+            <ButtonText size="md">Verify OTP</ButtonText>
+          </Button>
+
+          <Button
+            onPress={() => {
+              handleResendOTP();
+              setTimer("3:00");
+            }}
+            variant="link"
+            disabled={timer !== "0:00" || !isConnected}
+          >
+            {timer === "0:00" ? (
+              <ButtonText size="xs" className="text-typography-400">
+                Did not receive the OTP? Resend
+              </ButtonText>
+            ) : (
+              <ButtonText size="xs" className="text-typography-400">
+                Did not receive the OTP? Resend in {timer}
+              </ButtonText>
+            )}
+          </Button>
+        </View>
       </View>
-    </View>
+      {!isConnected && <NoInternet text="verifying your OTP" />}
+    </>
   );
 };
 

@@ -3,52 +3,58 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 
 import FormController from "@/components/common/controllers/form-controller";
 import { Button, ButtonText } from "@/components/ui/button";
+import NoInternet from "@/components/common/no-internet";
 import useSetPassword from "@/hooks/auth/use-set-password";
 import { useHaptics } from "@/utils/lib/haptics";
+import { useNetInfo } from "@/contexts/net-info-provider";
 
 const SetPassword = () => {
-  const { control, handleSubmit, onSubmit, isSubmitting } = useSetPassword();
+  const { isConnected } = useNetInfo();
   const { impactHaptics } = useHaptics();
+  const { control, handleSubmit, onSubmit, isSubmitting } = useSetPassword();
 
   return (
-    <View className="flex-1 bg-white px-4">
-      <KeyboardAwareScrollView
-        className="mt-10"
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
-        showsVerticalScrollIndicator={false}
-      >
-        <Text className="text-2xl font-bold mb-10">Set Your Password</Text>
-        <View className="flex flex-col gap-4">
-          <FormController
-            control={control}
-            name="password"
-            label="Password"
-            placeholder="Enter password"
-            isPassword={true}
-          />
-          <FormController
-            control={control}
-            name="confirmPassword"
-            label="Confirm Password"
-            placeholder="Enter confirm password"
-            isPassword={true}
-          />
-        </View>
-      </KeyboardAwareScrollView>
-      <View className="py-10 w-full flex justify-center items-center">
-        <Button
-          onPress={handleSubmit(onSubmit)}
-          onPressIn={() => impactHaptics("light")}
-          variant="solid"
-          size="xl"
-          className="rounded-full bg-primary-600 w-[75%]"
-          disabled={isSubmitting}
+    <>
+      <View className="flex-1 bg-white px-4">
+        <KeyboardAwareScrollView
+          className="mt-10"
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
+          showsVerticalScrollIndicator={false}
         >
-          <ButtonText size="md">Set Password</ButtonText>
-        </Button>
+          <Text className="text-2xl font-bold mb-10">Set Your Password</Text>
+          <View className="flex flex-col gap-4">
+            <FormController
+              control={control}
+              name="password"
+              label="Password"
+              placeholder="Enter password"
+              isPassword={true}
+            />
+            <FormController
+              control={control}
+              name="confirmPassword"
+              label="Confirm Password"
+              placeholder="Enter confirm password"
+              isPassword={true}
+            />
+          </View>
+        </KeyboardAwareScrollView>
+        <View className="py-10 w-full flex justify-center items-center">
+          <Button
+            onPress={handleSubmit(onSubmit)}
+            onPressIn={() => impactHaptics("light")}
+            variant="solid"
+            size="xl"
+            className="rounded-full bg-primary-600 w-[75%]"
+            disabled={isSubmitting || !isConnected}
+          >
+            <ButtonText size="md">Set Password</ButtonText>
+          </Button>
+        </View>
       </View>
-    </View>
+      {!isConnected && <NoInternet text="setting your password" />}
+    </>
   );
 };
 
