@@ -56,7 +56,7 @@ const FormController = <T extends Record<string, any>>({
           {/* Show input */}
           <Input
             isDisabled={isDisabled}
-            className={cn("h-14 rounded-lg", className)}
+            className={cn("h-14 rounded-lg mt-2 mb-1", className)}
           >
             {/* Show left icon if showIcon is true and leftIcon is provided */}
             {showIcon && leftIcon && (

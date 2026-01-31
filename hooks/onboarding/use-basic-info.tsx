@@ -34,7 +34,7 @@ const useOnboardingBasicInfo = () => {
     (value: GenderEnum) => {
       setValue("gender", value);
     },
-    [setValue]
+    [setValue],
   );
 
   const formatDateToYYYYMMDD = (date: Date): string => {
@@ -56,7 +56,7 @@ const useOnboardingBasicInfo = () => {
     try {
       const { data } = await axiosInstance.post(
         "/onboarding/basic-info",
-        formattedPayload
+        formattedPayload,
       );
       showToast({
         title: data.message,
@@ -85,7 +85,7 @@ const useOnboardingBasicInfo = () => {
       { label: "Female", value: GenderEnum.FEMALE },
       { label: "Others", value: GenderEnum.OTHERS },
     ],
-    []
+    [],
   );
 
   return {

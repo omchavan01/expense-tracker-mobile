@@ -39,7 +39,7 @@ const useSetPassword = () => {
         data.result.accessToken,
         data.result.refreshToken,
         data.result.accessTokenExpiresAt,
-        data.result.refreshTokenExpiresAt
+        data.result.refreshTokenExpiresAt,
       );
 
       router.replace({

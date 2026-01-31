@@ -11,7 +11,7 @@ module.exports = defineConfig([
       "prettier/prettier": [
         "error",
         {
-          trailingComma: "es5",
+          trailingComma: "all",
         },
       ],
     },

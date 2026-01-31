@@ -6,7 +6,7 @@ interface NetInfoContextType {
 }
 
 export const NetInfoContext = createContext<NetInfoContextType | undefined>(
-  undefined
+  undefined,
 );
 
 export const NetInfoProvider = ({

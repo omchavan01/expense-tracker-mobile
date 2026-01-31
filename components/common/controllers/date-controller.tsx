@@ -34,19 +34,19 @@ const DateController = <T extends Record<string, any>>({
   const today = new Date(
     new Date().getFullYear(),
     new Date().getMonth(),
-    new Date().getDate()
+    new Date().getDate(),
   );
 
   const minDOB = new Date(
     today.getFullYear() - 120,
     today.getMonth(),
-    today.getDate() + 1
+    today.getDate() + 1,
   );
 
   const maxDOB = new Date(
     today.getFullYear() - 13,
     today.getMonth(),
-    today.getDate() - 1
+    today.getDate() - 1,
   );
 
   return (

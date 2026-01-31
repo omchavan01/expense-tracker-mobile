@@ -10,12 +10,12 @@ interface AuthContextType {
     accessToken: string,
     refreshToken: string,
     accessTokenExpiresAt: string,
-    refreshTokenExpiresAt: string
+    refreshTokenExpiresAt: string,
   ) => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(
-  undefined
+  undefined,
 );
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     accessToken: string,
     refreshToken: string,
     accessTokenExpiresAt: string,
-    refreshTokenExpiresAt: string
+    refreshTokenExpiresAt: string,
   ) => {
     setTokenGetter(() => ({
       accessToken,

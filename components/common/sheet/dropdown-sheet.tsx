@@ -41,7 +41,7 @@ const DropdownSheet = <T,>({
         disappearsOnIndex={-1}
       />
     ),
-    []
+    [],
   );
 
   const handleOptionSelect = useCallback(
@@ -52,7 +52,7 @@ const DropdownSheet = <T,>({
       if (Keyboard.isVisible()) Keyboard.dismiss();
       setSearch("");
     },
-    [onSelect, bottomSheetRef, impactHaptics, setSearch]
+    [onSelect, bottomSheetRef, impactHaptics, setSearch],
   );
 
   const filteredOptions = useMemo(() => {
@@ -61,7 +61,7 @@ const DropdownSheet = <T,>({
     }
     const searchLower = search.toLowerCase();
     return options.filter((option) =>
-      option.label.toLowerCase().includes(searchLower)
+      option.label.toLowerCase().includes(searchLower),
     );
   }, [options, search]);
 

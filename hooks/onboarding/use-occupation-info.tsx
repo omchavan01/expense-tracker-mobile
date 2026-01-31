@@ -10,9 +10,9 @@ import {
   OnboardingOccupationInfoType,
 } from "@/utils/schemas/onboarding/onboarding-schema";
 import { IncomeCycleEnum } from "@/utils/enum/income-cycle-enum";
-import { countryList } from "@/assets/json/country-list";
 import { useHaptics } from "@/utils/lib/haptics";
 import { useShowToast } from "@/utils/lib/show-toast";
+import { countryList } from "@/constants/json/country-list";
 
 const useOnboardingOccupationInfo = () => {
   const router = useRouter();
@@ -36,14 +36,14 @@ const useOnboardingOccupationInfo = () => {
     (value: IncomeCycleEnum) => {
       setValue("incomeCycle", value);
     },
-    [setValue]
+    [setValue],
   );
 
   const handleCountrySelect = useCallback(
     (value: string) => {
       setValue("country", value);
     },
-    [setValue]
+    [setValue],
   );
 
   const onSubmit = async (payload: OnboardingOccupationInfoType) => {
@@ -55,7 +55,7 @@ const useOnboardingOccupationInfo = () => {
     try {
       const { data } = await axiosInstance.post(
         "/onboarding/occupation-info",
-        formattedPayload
+        formattedPayload,
       );
       showToast({
         title: data.message,
@@ -87,7 +87,7 @@ const useOnboardingOccupationInfo = () => {
       { label: "Quarterly", value: IncomeCycleEnum.QUARTERLY },
       { label: "Yearly", value: IncomeCycleEnum.YEARLY },
     ],
-    []
+    [],
   );
 
   const countryOptions = useMemo(() => countryList, []);

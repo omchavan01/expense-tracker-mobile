@@ -41,7 +41,7 @@ const DropdownController = <T extends Record<string, any>>({
       name={name}
       render={({ field, fieldState }) => {
         const selectedOption = options?.find(
-          (option) => option.value === field.value
+          (option) => option.value === field.value,
         );
         return (
           <FormControl isInvalid={!!fieldState.error}>

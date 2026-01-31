@@ -66,7 +66,7 @@ const Login = () => {
           </Button>
         </View>
       </View>
-      {isConnected && <NoInternet text="logging in" />}
+      {!isConnected && <NoInternet text="logging in" />}
     </>
   );
 };
