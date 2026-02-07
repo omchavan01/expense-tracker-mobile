@@ -1,11 +1,5 @@
-import { View, Text } from "react-native";
+import { Redirect } from "expo-router";
 
-const App = () => {
-  return (
-    <View className="flex-1 items-center justify-center">
-      <Text className="text-2xl font-bold">Expense Tracker App</Text>
-    </View>
-  );
-};
-
-export default App;
+export default function Index() {
+  return <Redirect href="/(auth)" />;
+}
