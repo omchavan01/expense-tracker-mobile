@@ -2,7 +2,7 @@ import { StatusBar, Text, View } from "react-native";
 import { useRouter } from "expo-router";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 
-import { Button, ButtonText } from "@/components/ui/button";
+import { Button, ButtonText, ButtonSpinner } from "@/components/ui/button";
 import FormController from "@/components/common/controllers/form-controller";
 import NoInternet from "@/components/common/no-internet";
 import useLogin from "@/hooks/auth/use-login";
@@ -51,7 +51,10 @@ const Login = () => {
             className="rounded-full bg-primary-600 w-[75%]"
             disabled={isSubmitting || !isConnected}
           >
-            <ButtonText size="md">Login</ButtonText>
+            {isSubmitting && <ButtonSpinner className="text-white" />}
+            <ButtonText size="md">
+              {isSubmitting ? "Logging in..." : "Login"}
+            </ButtonText>
           </Button>
           <Button
             onPress={() => {

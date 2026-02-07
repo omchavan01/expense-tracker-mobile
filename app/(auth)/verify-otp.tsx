@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { OtpInput } from "react-native-otp-entry";
 
-import { Button, ButtonText } from "@/components/ui/button";
+import { Button, ButtonText, ButtonSpinner } from "@/components/ui/button";
 import NoInternet from "@/components/common/no-internet";
 import useVerifyOTP from "@/hooks/auth/use-verify-otp";
 import { useNetInfo } from "@/contexts/net-info-provider";
@@ -101,7 +101,10 @@ const VerifyOTP = () => {
             className="rounded-full bg-primary-600 w-[75%]"
             disabled={isSubmitting || !isConnected}
           >
-            <ButtonText size="md">Verify OTP</ButtonText>
+            {isSubmitting && <ButtonSpinner className="text-white" />}
+            <ButtonText size="md">
+              {isSubmitting ? "Verifying OTP..." : "Verify OTP"}
+            </ButtonText>
           </Button>
 
           <Button

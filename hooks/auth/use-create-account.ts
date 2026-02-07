@@ -10,6 +10,7 @@ import {
 import axiosInstance from "@/utils/lib/axios";
 import { useShowToast } from "@/utils/lib/show-toast";
 import { useHaptics } from "@/utils/lib/haptics";
+import { getErrorMessage } from "@/utils/lib/error-helper";
 
 const useCreateAccount = () => {
   const router = useRouter();
@@ -36,12 +37,8 @@ const useCreateAccount = () => {
         params: { email: payload.email },
       });
     } catch (error: any) {
-      const errorMessage =
-        error?.response?.data?.message ||
-        error?.message ||
-        "Something went wrong";
       showToast({
-        title: errorMessage,
+        title: getErrorMessage(error),
         type: "error",
       });
       notificationHaptics("error");

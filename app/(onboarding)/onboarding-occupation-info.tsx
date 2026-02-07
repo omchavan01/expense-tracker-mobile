@@ -3,7 +3,7 @@ import React, { useRef } from "react";
 import { Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 
-import { Button, ButtonText } from "@/components/ui/button";
+import { Button, ButtonText, ButtonSpinner } from "@/components/ui/button";
 import DropdownController from "@/components/common/controllers/dropdown-controller";
 import FormController from "@/components/common/controllers/form-controller";
 import DropdownSheet from "@/components/common/sheet/dropdown-sheet";
@@ -86,7 +86,10 @@ const OnboardingOccupationInfo = () => {
             className="rounded-full bg-primary-600 w-[75%]"
             disabled={isSubmitting || !isConnected}
           >
-            <ButtonText size="md">Continue</ButtonText>
+            {isSubmitting && <ButtonSpinner className="text-white" />}
+            <ButtonText size="md">
+              {isSubmitting ? "Submitting..." : "Continue"}
+            </ButtonText>
           </Button>
         </View>
       </View>

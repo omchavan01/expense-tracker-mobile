@@ -10,6 +10,7 @@ import {
   countrySchema,
   incomeCycleSchema,
   incomeSchema,
+  categoryNameSchema,
 } from "./form-schema";
 
 const onboardingBasicInfoSchema = z.object({
@@ -48,11 +49,24 @@ const defaultOnboardingOccupationInfoValues: OnboardingOccupationInfoType = {
   income: "",
 };
 
+const onboardingCategoryInfoSchema = z.object({
+  categoryName: categoryNameSchema,
+});
+
+type OnboardingCategoryInfoType = z.infer<typeof onboardingCategoryInfoSchema>;
+
+const defaultOnboardingCategoryInfoValues: OnboardingCategoryInfoType = {
+  categoryName: "",
+};
+
 export {
   onboardingBasicInfoSchema,
   onboardingOccupationInfoSchema,
+  onboardingCategoryInfoSchema,
   OnboardingBasicInfoType,
   OnboardingOccupationInfoType,
+  OnboardingCategoryInfoType,
   defaultOnboardingBasicInfoValues,
   defaultOnboardingOccupationInfoValues,
+  defaultOnboardingCategoryInfoValues,
 };

@@ -3,7 +3,7 @@ import { StatusBar, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 
 import FormController from "@/components/common/controllers/form-controller";
-import { Button, ButtonText } from "@/components/ui/button";
+import { Button, ButtonText, ButtonSpinner } from "@/components/ui/button";
 import NoInternet from "@/components/common/no-internet";
 import useCreateAccount from "@/hooks/auth/use-create-account";
 import { useNetInfo } from "@/contexts/net-info-provider";
@@ -39,7 +39,10 @@ const CreateAccount = () => {
             className="rounded-full w-[75%] bg-primary-600"
             disabled={isSubmitting || !isConnected}
           >
-            <ButtonText size="md">Create Account</ButtonText>
+            {isSubmitting && <ButtonSpinner className="text-white" />}
+            <ButtonText size="md">
+              {isSubmitting ? "Sending OTP..." : "Create Account"}
+            </ButtonText>
           </Button>
           <Button
             onPress={() => {

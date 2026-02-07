@@ -10,6 +10,7 @@ import {
 import axiosInstance from "@/utils/lib/axios";
 import { useShowToast } from "@/utils/lib/show-toast";
 import { useHaptics } from "@/utils/lib/haptics";
+import { getErrorMessage } from "@/utils/lib/error-helper";
 
 const useVerifyOTP = () => {
   const { email } = useLocalSearchParams<{ email: string }>();
@@ -45,12 +46,8 @@ const useVerifyOTP = () => {
       setError("otp", {
         message: "",
       });
-      const errorMessage =
-        error?.response?.data?.message ||
-        error?.message ||
-        "Something went wrong";
       showToast({
-        title: errorMessage,
+        title: getErrorMessage(error),
         type: "error",
       });
       notificationHaptics("error");
@@ -65,12 +62,8 @@ const useVerifyOTP = () => {
         type: "success",
       });
     } catch (error: any) {
-      const errorMessage =
-        error?.response?.data?.message ||
-        error?.message ||
-        "Something went wrong";
       showToast({
-        title: errorMessage,
+        title: getErrorMessage(error),
         type: "error",
       });
     }

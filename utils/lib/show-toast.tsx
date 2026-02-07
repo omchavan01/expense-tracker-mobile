@@ -14,16 +14,19 @@ export const useShowToast = () => {
     description,
     type = "muted",
     variant = "solid",
+    placement = "top",
   }: ToastProps) => {
     toast.show({
       id: Math.random().toString(),
-      placement: "top",
+      placement,
       duration: 2000,
       render: ({ id }) => {
         return (
           <Toast nativeID={`toast-${id}`} action={type} variant={variant}>
             <ToastTitle>{title}</ToastTitle>
-            {description && <ToastDescription>{description}</ToastDescription>}
+            {description && (
+              <ToastDescription size="xs">{description}</ToastDescription>
+            )}
           </Toast>
         );
       },

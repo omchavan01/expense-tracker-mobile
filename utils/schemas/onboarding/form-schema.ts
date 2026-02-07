@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { GenderEnum } from "@/utils/enum/gender-enum";
 import { IncomeCycleEnum } from "@/utils/enum/income-cycle-enum";
-import { countryList } from "@/assets/json/country-list";
+import { countryList } from "@/constants/json/country-list";
 
 const firstNameSchema = z.string().trim().min(1, {
   message: "First name is required",
@@ -94,6 +94,14 @@ const incomeSchema = z
     message: "Income amount must be less than 1 billion",
   });
 
+const categoryNameSchema = z
+  .string()
+  .trim()
+  .min(1, { message: "Category name is required" })
+  .min(3, { message: "Category name must be at least 3 characters" })
+  .max(20, { message: "Category name must be at most 20 characters" })
+  .transform((value) => value.replace(/\s+/g, " "));
+
 export {
   firstNameSchema,
   lastNameSchema,
@@ -104,4 +112,5 @@ export {
   countrySchema,
   incomeCycleSchema,
   incomeSchema,
+  categoryNameSchema,
 };

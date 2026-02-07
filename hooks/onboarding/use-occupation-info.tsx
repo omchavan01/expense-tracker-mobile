@@ -12,6 +12,7 @@ import {
 import { IncomeCycleEnum } from "@/utils/enum/income-cycle-enum";
 import { useHaptics } from "@/utils/lib/haptics";
 import { useShowToast } from "@/utils/lib/show-toast";
+import { getErrorMessage } from "@/utils/lib/error-helper";
 import { countryList } from "@/constants/json/country-list";
 
 const useOnboardingOccupationInfo = () => {
@@ -66,12 +67,8 @@ const useOnboardingOccupationInfo = () => {
         params: { onboardingStep: String(data.result.onboardingStep) },
       });
     } catch (error: any) {
-      const errorMessage =
-        error?.response?.data?.message ||
-        error?.message ||
-        "Something went wrong";
       showToast({
-        title: errorMessage,
+        title: getErrorMessage(error),
         type: "error",
       });
       notificationHaptics("error");

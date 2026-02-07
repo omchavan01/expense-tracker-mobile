@@ -12,6 +12,7 @@ import {
 import { GenderEnum } from "@/utils/enum/gender-enum";
 import { useHaptics } from "@/utils/lib/haptics";
 import { useShowToast } from "@/utils/lib/show-toast";
+import { getErrorMessage } from "@/utils/lib/error-helper";
 
 const useOnboardingBasicInfo = () => {
   const router = useRouter();
@@ -67,12 +68,8 @@ const useOnboardingBasicInfo = () => {
         params: { onboardingStep: String(data.result.onboardingStep) },
       });
     } catch (error: any) {
-      const errorMessage =
-        error?.response?.data?.message ||
-        error?.message ||
-        "Something went wrong";
       showToast({
-        title: errorMessage,
+        title: getErrorMessage(error),
         type: "error",
       });
       notificationHaptics("error");

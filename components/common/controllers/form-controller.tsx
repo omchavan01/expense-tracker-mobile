@@ -112,9 +112,13 @@ const FormController = <T extends Record<string, any>>({
 
           {/* Show error if fieldState.error is true */}
           {fieldState.error && (
-            <FormControlError>
-              <FormControlErrorIcon as={AlertCircleIcon} size="sm" />
-              <FormControlErrorText>
+            <FormControlError className="flex-row items-start">
+              <FormControlErrorIcon
+                as={AlertCircleIcon}
+                size="sm"
+                style={{ marginTop: 2, marginRight: 3 }}
+              />
+              <FormControlErrorText className="flex-1 flex-shrink leading-tight">
                 {fieldState.error?.message}
               </FormControlErrorText>
             </FormControlError>

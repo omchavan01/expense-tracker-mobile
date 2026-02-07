@@ -11,6 +11,7 @@ import axiosInstance from "@/utils/lib/axios";
 import { useShowToast } from "@/utils/lib/show-toast";
 import { useAuth } from "@/contexts/auth-provider";
 import { useHaptics } from "@/utils/lib/haptics";
+import { getErrorMessage } from "@/utils/lib/error-helper";
 
 const useLogin = () => {
   const router = useRouter();
@@ -49,12 +50,8 @@ const useLogin = () => {
           },
         });
     } catch (error: any) {
-      const errorMessage =
-        error?.response?.data?.message ||
-        error?.message ||
-        "Something went wrong";
       showToast({
-        title: errorMessage,
+        title: getErrorMessage(error),
         type: "error",
       });
       notificationHaptics("error");

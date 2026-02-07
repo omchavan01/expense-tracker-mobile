@@ -2,7 +2,7 @@ import { Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 
 import FormController from "@/components/common/controllers/form-controller";
-import { Button, ButtonText } from "@/components/ui/button";
+import { Button, ButtonText, ButtonSpinner } from "@/components/ui/button";
 import NoInternet from "@/components/common/no-internet";
 import useSetPassword from "@/hooks/auth/use-set-password";
 import { useHaptics } from "@/utils/lib/haptics";
@@ -49,7 +49,10 @@ const SetPassword = () => {
             className="rounded-full bg-primary-600 w-[75%]"
             disabled={isSubmitting || !isConnected}
           >
-            <ButtonText size="md">Set Password</ButtonText>
+            {isSubmitting && <ButtonSpinner className="text-white" />}
+            <ButtonText size="md">
+              {isSubmitting ? "Setting password..." : "Set Password"}
+            </ButtonText>
           </Button>
         </View>
       </View>
