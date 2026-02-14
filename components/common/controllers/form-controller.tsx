@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Controller } from "react-hook-form";
-import { TouchableOpacity } from "react-native";
+import { TextInput, TouchableOpacity } from "react-native";
 
 import {
   FormControl,
@@ -12,7 +12,7 @@ import {
   FormControlLabelText,
 } from "@/components/ui/form-control";
 import { AlertCircleIcon, EyeIcon, EyeOffIcon } from "@/components/ui/icon";
-import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
+import { Input, InputIcon, InputSlot } from "@/components/ui/input";
 import { cn } from "@/utils/lib/cn";
 import { FormControllerProps } from "@/utils/lib/types";
 
@@ -34,6 +34,7 @@ const FormController = <T extends Record<string, any>>({
   onRightIconPress,
 }: FormControllerProps<T>) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isFocus, setIsFocus] = useState(false);
 
   return (
     <Controller
@@ -56,7 +57,12 @@ const FormController = <T extends Record<string, any>>({
           {/* Show input */}
           <Input
             isDisabled={isDisabled}
-            className={cn("h-14 rounded-lg mt-2 mb-1", className)}
+            onFocus={() => setIsFocus(true)}
+            onBlur={() => setIsFocus(false)}
+            className={cn(
+              `h-14 rounded-lg mt-2 mb-1 ${isFocus && "border border-primary-500"}`,
+              className,
+            )}
           >
             {/* Show left icon if showIcon is true and leftIcon is provided */}
             {showIcon && leftIcon && (
@@ -71,13 +77,13 @@ const FormController = <T extends Record<string, any>>({
               </InputSlot>
             )}
 
-            {/* Show input field */}
-            <InputField
+            <TextInput
               placeholder={placeholder}
               value={field.value}
               onChangeText={field.onChange}
               onBlur={field.onBlur}
               secureTextEntry={isPassword && !showPassword}
+              className="pl-3 pr-10 placeholder:text-typography-500 flex-1 h-full"
               {...inputProps}
             />
 

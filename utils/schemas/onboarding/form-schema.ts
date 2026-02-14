@@ -19,25 +19,6 @@ const dateOfBirthSchema = z
   .refine(
     (val) => {
       if (!val) return false;
-
-      const today = new Date(
-        new Date().getFullYear(),
-        new Date().getMonth(),
-        new Date().getDate(),
-      );
-
-      const minDOB = new Date(
-        today.getFullYear() - 120,
-        today.getMonth(),
-        today.getDate() + 1,
-      );
-
-      const maxDOB = new Date(
-        today.getFullYear() - 13,
-        today.getMonth(),
-        today.getDate() - 1,
-      );
-
       return val >= minDOB && val <= maxDOB;
     },
     {
@@ -102,7 +83,28 @@ const categoryNameSchema = z
   .max(20, { message: "Category name must be at most 20 characters" })
   .transform((value) => value.replace(/\s+/g, " "));
 
+const today = new Date(
+  new Date().getFullYear(),
+  new Date().getMonth(),
+  new Date().getDate(),
+);
+
+const minDOB = new Date(
+  today.getFullYear() - 120,
+  today.getMonth(),
+  today.getDate() + 1,
+);
+
+const maxDOB = new Date(
+  today.getFullYear() - 13,
+  today.getMonth(),
+  today.getDate() - 1,
+);
+
 export {
+  today,
+  minDOB,
+  maxDOB,
   firstNameSchema,
   lastNameSchema,
   dateOfBirthSchema,

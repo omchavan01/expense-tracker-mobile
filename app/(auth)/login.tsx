@@ -1,5 +1,6 @@
 import { StatusBar, Text, View } from "react-native";
 import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 
 import { Button, ButtonText, ButtonSpinner } from "@/components/ui/button";
@@ -16,7 +17,7 @@ const Login = () => {
   const { control, handleSubmit, onSubmit, isSubmitting } = useLogin();
 
   return (
-    <>
+    <SafeAreaView className="flex-1 bg-white">
       <View className="flex-1 bg-white px-4">
         <StatusBar barStyle="dark-content" backgroundColor="#FFF" />
         <KeyboardAwareScrollView
@@ -32,6 +33,10 @@ const Login = () => {
               name="email"
               label="Email"
               placeholder="Enter email address"
+              isMandatory={false}
+              inputProps={{
+                keyboardType: "email-address",
+              }}
             />
             <FormController
               control={control}
@@ -39,6 +44,7 @@ const Login = () => {
               label="Password"
               placeholder="Enter password"
               isPassword={true}
+              isMandatory={false}
             />
           </View>
         </KeyboardAwareScrollView>
@@ -70,7 +76,7 @@ const Login = () => {
         </View>
       </View>
       {!isConnected && <NoInternet text="logging in" />}
-    </>
+    </SafeAreaView>
   );
 };
 

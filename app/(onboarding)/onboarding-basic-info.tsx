@@ -1,29 +1,48 @@
 import BottomSheet from "@gorhom/bottom-sheet";
-import React, { useRef } from "react";
-import { Text, View } from "react-native";
+import React, { useCallback, useRef } from "react";
+import { Platform, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
+import { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 
 import { Button, ButtonText, ButtonSpinner } from "@/components/ui/button";
 import DateController from "@/components/common/controllers/date-controller";
 import DropdownController from "@/components/common/controllers/dropdown-controller";
 import FormController from "@/components/common/controllers/form-controller";
 import DropdownSheet from "@/components/common/sheet/dropdown-sheet";
+import DatePickerSheet from "@/components/common/sheet/date-picker-sheet";
 import NoInternet from "@/components/common/no-internet";
 import useOnboardingBasicInfo from "@/hooks/onboarding/use-basic-info";
 import { useNetInfo } from "@/contexts/net-info-provider";
+import { useHaptics } from "@/utils/lib/haptics";
+import { minDOB, maxDOB } from "@/utils/schemas/onboarding/form-schema";
 
 const OnboardingBasicInfo = () => {
-  const bottomSheetRef = useRef<BottomSheet>(null);
+  const bottomSheetRef = useRef<BottomSheet | null>(null);
+  const dateBottomSheetRef = useRef<BottomSheet | null>(null);
   const { isConnected } = useNetInfo();
+  const { notificationHaptics } = useHaptics();
   const {
     control,
+    setValue,
     handleSubmit,
     onSubmit,
     isSubmitting,
+    dateOfBirthValue,
     genderOptions,
     genderValue,
     handleGenderSelect,
   } = useOnboardingBasicInfo();
+
+  const handleDateChange = useCallback(
+    (event: DateTimePickerEvent, selectedDate: Date | undefined) => {
+      if (event.type === "dismissed") return;
+      if (selectedDate) {
+        setValue("dateOfBirth", selectedDate);
+        notificationHaptics("success");
+      }
+    },
+    [setValue, notificationHaptics],
+  );
 
   return (
     <>
@@ -54,6 +73,8 @@ const OnboardingBasicInfo = () => {
               name="dateOfBirth"
               label="Date of Birth"
               placeholder="Select date of birth"
+              bottomSheetRef={dateBottomSheetRef}
+              handleDateChange={handleDateChange}
             />
             <DropdownController
               control={control}
@@ -88,6 +109,15 @@ const OnboardingBasicInfo = () => {
         selectedValue={genderValue!}
         onSelect={handleGenderSelect}
       />
+      {Platform.OS === "ios" && (
+        <DatePickerSheet
+          bottomSheetRef={dateBottomSheetRef}
+          value={dateOfBirthValue ?? maxDOB}
+          minDOB={minDOB}
+          maxDOB={maxDOB}
+          onChange={handleDateChange}
+        />
+      )}
       {!isConnected && <NoInternet text="completing your basic details" />}
     </>
   );

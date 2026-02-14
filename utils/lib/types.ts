@@ -1,6 +1,7 @@
 import { TextInputProps } from "react-native";
 import { Control, Path } from "react-hook-form";
 import BottomSheet from "@gorhom/bottom-sheet";
+import { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 
 export interface BaseControllerProps<T extends Record<string, any>> {
   control: Control<T>;
@@ -24,6 +25,16 @@ export interface FormControllerProps<
   onRightIconPress?: () => void;
 }
 
+export interface DateControllerProps<
+  T extends Record<string, any>,
+> extends BaseControllerProps<T> {
+  bottomSheetRef: React.RefObject<BottomSheet | null>;
+  handleDateChange: (
+    event: DateTimePickerEvent,
+    selectedDate: Date | undefined,
+  ) => void;
+}
+
 export interface DropdownControllerProps<
   T extends Record<string, any>,
 > extends BaseControllerProps<T> {
@@ -45,6 +56,17 @@ export interface DropdownSheetProps<T> {
   onSelect: (value: T) => void;
   searchEnabled?: boolean;
   isScrollable?: boolean;
+}
+
+export interface DatePickerSheetProps {
+  bottomSheetRef: React.RefObject<BottomSheet | null>;
+  value: Date;
+  minDOB: Date;
+  maxDOB: Date;
+  onChange: (
+    event: DateTimePickerEvent,
+    selectedDate: Date | undefined,
+  ) => void;
 }
 
 export interface ToastProps {

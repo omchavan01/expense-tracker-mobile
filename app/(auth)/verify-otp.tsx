@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { OtpInput } from "react-native-otp-entry";
 
@@ -48,7 +49,7 @@ const VerifyOTP = () => {
   }, []);
 
   return (
-    <>
+    <SafeAreaView className="flex-1 bg-white">
       <View className="flex-1 bg-white px-4">
         <KeyboardAwareScrollView
           className="mt-10"
@@ -128,7 +129,7 @@ const VerifyOTP = () => {
         </View>
       </View>
       {!isConnected && <NoInternet text="verifying your OTP" />}
-    </>
+    </SafeAreaView>
   );
 };
 

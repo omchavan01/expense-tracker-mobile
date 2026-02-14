@@ -63,6 +63,7 @@ const DropdownController = <T extends Record<string, any>>({
                   placeholder={placeholder}
                   value={selectedOption?.label}
                   editable={false}
+                  className="pr-10"
                 />
                 <View
                   className="absolute right-2"

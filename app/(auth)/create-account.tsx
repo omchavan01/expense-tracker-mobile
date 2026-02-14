@@ -1,5 +1,6 @@
 import { useRouter } from "expo-router";
 import { StatusBar, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 
 import FormController from "@/components/common/controllers/form-controller";
@@ -14,7 +15,7 @@ const CreateAccount = () => {
   const { control, handleSubmit, onSubmit, isSubmitting } = useCreateAccount();
 
   return (
-    <>
+    <SafeAreaView className="flex-1 bg-white">
       <View className="flex-1 bg-white px-4">
         <StatusBar barStyle="dark-content" backgroundColor="#FFF" />
         <KeyboardAwareScrollView
@@ -29,6 +30,7 @@ const CreateAccount = () => {
             name="email"
             label="Email"
             placeholder="Enter email address"
+            isMandatory={false}
           />
         </KeyboardAwareScrollView>
         <View className="py-10 w-full flex justify-center items-center">
@@ -58,7 +60,7 @@ const CreateAccount = () => {
         </View>
       </View>
       {!isConnected && <NoInternet text="creating your account" />}
-    </>
+    </SafeAreaView>
   );
 };
 

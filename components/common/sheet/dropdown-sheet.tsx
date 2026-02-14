@@ -82,7 +82,7 @@ const DropdownSheet = <T,>({
           <Text className="text-lg font-medium flex-1">{title}</Text>
           <TouchableOpacity
             onPress={() => bottomSheetRef.current?.close()}
-            className="p-2 bg-background-200 rounded-full"
+            className="p-2 bg-gray-300 rounded-full"
           >
             <Icon as={CloseIcon} size="xl" />
           </TouchableOpacity>
@@ -94,7 +94,11 @@ const DropdownSheet = <T,>({
             <InputSlot>
               <InputIcon as={SearchIcon} size="sm" className="left-2 mr-2" />
             </InputSlot>
-            <InputField value={search} onChangeText={setSearch} />
+            <InputField
+              value={search}
+              onChangeText={setSearch}
+              placeholder="Search"
+            />
             <InputSlot>
               <TouchableOpacity onPress={() => setSearch("")}>
                 <InputIcon as={CloseIcon} size="sm" className="right-2 ml-2" />
@@ -119,7 +123,7 @@ const DropdownSheet = <T,>({
                   <View
                     className={`
                     flex-row items-center rounded-xl mb-4
-                    ${isSelected ? "bg-primary-50 border border-primary-200" : "bg-background-0 border border-outline-50"}
+                    ${isSelected ? "bg-primary-50 border border-primary-200" : "border border-outline-50"}
                     `}
                   >
                     <Radio
