@@ -16,6 +16,7 @@ const OnboardingCategoryInfo = () => {
     control,
     isSubmitting,
     categoryOptions,
+    sortedCategoryOptions,
     newCategoryModalOpen,
     setNewCategoryModalOpen,
     handleSubmit,
@@ -23,9 +24,9 @@ const OnboardingCategoryInfo = () => {
     handleSelectCategory,
     handleUnselectCategory,
     handleDeleteCategory,
-    handleResetCategories,
     handleCloseModal,
     handleClearCategoryName,
+    handleMessageAndColor,
     onSubmit,
     canUnselectOrDelete,
     canSelectMore,
@@ -41,20 +42,22 @@ const OnboardingCategoryInfo = () => {
           contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
           showsVerticalScrollIndicator={false}
         >
-          <Text className="text-2xl font-bold mb-10">Category Information</Text>
+          <Text className="text-2xl font-bold mb-12">Category Information</Text>
           <OnboardingCategoryBox
-            categoryOptions={categoryOptions}
+            categoryOptions={sortedCategoryOptions}
             handleSelectCategory={handleSelectCategory}
             handleUnselectCategory={handleUnselectCategory}
             handleDeleteCategory={handleDeleteCategory}
-            handleResetCategories={handleResetCategories}
             handleAddCategory={() => setNewCategoryModalOpen(true)}
             canUnselectOrDelete={canUnselectOrDelete}
             canSelectMore={canSelectMore}
             canCreateCategory={canCreateCategory}
           />
-          <Text className="text-xs text-gray-500 mt-1 italic">
-            Select 5-15 categories. You can create up to 30 categories.
+          <Text
+            className={`text-xs ${handleMessageAndColor.color} mt-2
+            `}
+          >
+            {handleMessageAndColor.message}
           </Text>
         </KeyboardAwareScrollView>
         <View className="py-10 w-full flex justify-center items-center">
@@ -67,7 +70,7 @@ const OnboardingCategoryInfo = () => {
           >
             {isSubmitting && <ButtonSpinner className="text-white" />}
             <ButtonText size="md">
-              {isSubmitting ? "Submitting..." : "Continue"}
+              {isSubmitting ? "Submitting" : "Continue"}
             </ButtonText>
           </Button>
         </View>

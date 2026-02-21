@@ -1,5 +1,11 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { Keyboard, Text, TouchableOpacity, View } from "react-native";
+import {
+  Keyboard,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import BottomSheet, {
   BottomSheetBackdrop,
   BottomSheetBackdropProps,
@@ -16,7 +22,6 @@ import {
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { CircleIcon, CloseIcon, Icon, SearchIcon } from "@/components/ui/icon";
 import { DropdownOption, DropdownSheetProps } from "@/utils/lib/types";
-import { useHaptics } from "@/utils/lib/haptics";
 
 const DropdownSheet = <T,>({
   title,
@@ -26,9 +31,7 @@ const DropdownSheet = <T,>({
   selectedValue,
   onSelect,
   searchEnabled = false,
-  isScrollable = false,
 }: DropdownSheetProps<T>) => {
-  const { impactHaptics } = useHaptics();
   const snapPoints = useMemo(() => snapPointsList, [snapPointsList]);
 
   const [search, setSearch] = useState("");
@@ -46,13 +49,12 @@ const DropdownSheet = <T,>({
 
   const handleOptionSelect = useCallback(
     (value: T) => {
-      impactHaptics("light");
       onSelect(value);
       bottomSheetRef.current?.close();
       if (Keyboard.isVisible()) Keyboard.dismiss();
       setSearch("");
     },
-    [onSelect, bottomSheetRef, impactHaptics, setSearch],
+    [onSelect, bottomSheetRef, setSearch],
   );
 
   const filteredOptions = useMemo(() => {
@@ -75,6 +77,7 @@ const DropdownSheet = <T,>({
       keyboardBlurBehavior="restore"
       enablePanDownToClose={false}
       enableDynamicSizing={false}
+      enableContentPanningGesture={false}
     >
       <View className="flex-1 px-4">
         {/* Header */}
@@ -82,7 +85,7 @@ const DropdownSheet = <T,>({
           <Text className="text-lg font-medium flex-1">{title}</Text>
           <TouchableOpacity
             onPress={() => bottomSheetRef.current?.close()}
-            className="p-2 bg-background-200 rounded-full"
+            className="p-2 bg-gray-300 rounded-full"
           >
             <Icon as={CloseIcon} size="xl" />
           </TouchableOpacity>
@@ -94,7 +97,11 @@ const DropdownSheet = <T,>({
             <InputSlot>
               <InputIcon as={SearchIcon} size="sm" className="left-2 mr-2" />
             </InputSlot>
-            <InputField value={search} onChangeText={setSearch} />
+            <InputField
+              value={search}
+              onChangeText={setSearch}
+              placeholder="Search"
+            />
             <InputSlot>
               <TouchableOpacity onPress={() => setSearch("")}>
                 <InputIcon as={CloseIcon} size="sm" className="right-2 ml-2" />
@@ -102,9 +109,10 @@ const DropdownSheet = <T,>({
             </InputSlot>
           </Input>
         )}
-
-        {/* FlashList */}
-        <View className="flex-1 mt-4">
+        <ScrollView
+          className="flex-1 mt-4"
+          showsVerticalScrollIndicator={false}
+        >
           <RadioGroup>
             <FlashList<DropdownOption>
               data={filteredOptions}
@@ -112,14 +120,13 @@ const DropdownSheet = <T,>({
               extraData={selectedValue}
               showsVerticalScrollIndicator={false}
               keyboardShouldPersistTaps="handled"
-              scrollEnabled={isScrollable}
               renderItem={({ item }) => {
                 const isSelected = selectedValue === item.value;
                 return (
                   <View
                     className={`
                     flex-row items-center rounded-xl mb-4
-                    ${isSelected ? "bg-primary-50 border border-primary-200" : "bg-background-0 border border-outline-50"}
+                    ${isSelected ? "bg-primary-50 border border-primary-200" : "border border-outline-50"}
                     `}
                   >
                     <Radio
@@ -153,7 +160,7 @@ const DropdownSheet = <T,>({
               }}
             />
           </RadioGroup>
-        </View>
+        </ScrollView>
       </View>
     </BottomSheet>
   );

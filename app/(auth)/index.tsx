@@ -1,4 +1,5 @@
 import { StatusBar, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import LottieView from "lottie-react-native";
 
@@ -14,9 +15,9 @@ const AuthIndex = () => {
   const { isConnected } = useNetInfo();
 
   return (
-    <>
+    <SafeAreaView className="flex-1 bg-primary-950">
       <StatusBar barStyle="light-content" backgroundColor="#321A5C" />
-      <View className="bg-primary-950 flex-1 items-center justify-center">
+      <View className="flex-1 items-center justify-center">
         <Text className="text-white text-2xl absolute top-24 font-semibold">
           Take Control of Your Finances
         </Text>
@@ -35,7 +36,7 @@ const AuthIndex = () => {
             size="xl"
             className="rounded-full w-[75%] bg-primary-500"
             onPress={() => {
-              router.push("/create-account");
+              router.push("/onboarding-occupation-info");
             }}
             disabled={!isConnected}
             onPressIn={() => impactHaptics("light")}
@@ -49,7 +50,7 @@ const AuthIndex = () => {
             size="xl"
             className="rounded-full w-[75%] border-white"
             onPress={() => {
-              router.push("/login");
+              router.push("/onboarding-basic-info");
             }}
             disabled={!isConnected}
             onPressIn={() => impactHaptics("light")}
@@ -61,7 +62,7 @@ const AuthIndex = () => {
         </View>
       </View>
       {!isConnected && <NoInternet />}
-    </>
+    </SafeAreaView>
   );
 };
 

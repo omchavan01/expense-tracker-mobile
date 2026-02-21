@@ -62,14 +62,16 @@ const useOnboardingCategoryInfo = () => {
       return;
     }
     const selectNewCategory = selectedCount < MAX_SELECTED_CATEGORIES;
-    setCategoryOptions((prev) => [
-      {
+    setCategoryOptions((prev) => {
+      const newCategory = {
         label: payload.categoryName,
         value: payload.categoryName,
         isSelected: selectNewCategory,
-      },
-      ...prev,
-    ]);
+      };
+
+      if (selectNewCategory) return [newCategory, ...prev];
+      return [...prev, newCategory];
+    });
     reset({ categoryName: "" });
   };
 
@@ -118,13 +120,9 @@ const useOnboardingCategoryInfo = () => {
       });
       return;
     }
-    setCategoryOptions(
-      categoryOptions.filter((category) => category.value !== option.value),
+    setCategoryOptions((prev) =>
+      prev.filter((category) => category.value !== option.value),
     );
-  };
-
-  const handleResetCategories = () => {
-    setCategoryOptions(onboardingCategoryList);
   };
 
   const handleClearCategoryName = () => {
@@ -136,6 +134,31 @@ const useOnboardingCategoryInfo = () => {
     handleClearCategoryName();
     setNewCategoryModalOpen(false);
   };
+
+  const sortedCategoryOptions = useMemo(() => {
+    return [...categoryOptions].sort(
+      (a, b) => Number(b.isSelected) - Number(a.isSelected),
+    );
+  }, [categoryOptions]);
+
+  const handleMessageAndColor = useMemo(() => {
+    if (categoryOptions.length === MAX_TOTAL_CATEGORIES)
+      return {
+        message: `You've created ${MAX_TOTAL_CATEGORIES} categories. You can't create more.`,
+        color: "text-error-500",
+      };
+
+    if (selectedCount === MAX_SELECTED_CATEGORIES)
+      return {
+        message: `${MAX_SELECTED_CATEGORIES} categories selected. You can't select more.`,
+        color: "text-amber-500",
+      };
+
+    return {
+      message: `${selectedCount} categories selected`,
+      color: "text-gray-500",
+    };
+  }, [categoryOptions.length, selectedCount]);
 
   const onSubmit = async (payload: OnboardingCategoryOption[]) => {
     if (
@@ -150,17 +173,22 @@ const useOnboardingCategoryInfo = () => {
       return;
     }
     const formattedPayload = {
-      categoryInfo: {
-        categories: payload,
-      },
+      categoriesInfo: payload.map((category) => ({
+        title: category.label,
+        value: category.value,
+        active: category.isSelected,
+      })),
     };
+
+    console.log("formattedPayload", JSON.stringify(formattedPayload, null, 2));
 
     try {
       setIsSubmitting(true);
       const { data } = await axiosInstance.post(
-        "/onboarding/category-info",
+        "/onboarding/categories-info",
         formattedPayload,
       );
+      console.log("data", data);
       showToast({
         title: data.message,
         type: "success",
@@ -168,6 +196,7 @@ const useOnboardingCategoryInfo = () => {
       notificationHaptics("success");
       router.replace("/(logged)");
     } catch (error: any) {
+      console.log("error", error);
       showToast({
         title: getErrorMessage(error),
         type: "error",
@@ -182,6 +211,7 @@ const useOnboardingCategoryInfo = () => {
     control,
     isSubmitting,
     categoryOptions,
+    sortedCategoryOptions,
     newCategoryModalOpen,
     setNewCategoryModalOpen,
     handleSubmit,
@@ -189,9 +219,9 @@ const useOnboardingCategoryInfo = () => {
     handleSelectCategory,
     handleUnselectCategory,
     handleDeleteCategory,
-    handleResetCategories,
     handleCloseModal,
     handleClearCategoryName,
+    handleMessageAndColor,
     onSubmit,
     canUnselectOrDelete,
     canSelectMore,

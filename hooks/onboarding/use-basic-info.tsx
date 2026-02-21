@@ -30,6 +30,7 @@ const useOnboardingBasicInfo = () => {
   });
 
   const genderValue = watch("gender");
+  const dateOfBirthValue = watch("dateOfBirth");
 
   const handleGenderSelect = useCallback(
     (value: GenderEnum) => {
@@ -87,9 +88,11 @@ const useOnboardingBasicInfo = () => {
 
   return {
     control,
+    setValue,
     handleSubmit,
     onSubmit,
     isSubmitting,
+    dateOfBirthValue,
     genderOptions,
     genderValue,
     handleGenderSelect,

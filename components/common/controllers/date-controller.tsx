@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Keyboard, Pressable, View } from "react-native";
+import { Keyboard, Platform, Pressable, View } from "react-native";
 import { Controller } from "react-hook-form";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
@@ -14,7 +14,8 @@ import {
 } from "@/components/ui/form-control";
 import { AlertCircleIcon, CalendarDaysIcon } from "@/components/ui/icon";
 import { Input, InputField, InputIcon } from "@/components/ui/input";
-import { BaseControllerProps } from "@/utils/lib/types";
+import { minDOB, maxDOB } from "@/utils/schemas/onboarding/form-schema";
+import { DateControllerProps } from "@/utils/lib/types";
 import { cn } from "@/utils/lib/cn";
 import { useHaptics } from "@/utils/lib/haptics";
 
@@ -26,28 +27,12 @@ const DateController = <T extends Record<string, any>>({
   isMandatory = true,
   isDisabled,
   className,
-}: BaseControllerProps<T>) => {
+  bottomSheetRef,
+  handleDateChange,
+}: DateControllerProps<T>) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
-  const { impactHaptics, notificationHaptics } = useHaptics();
-
-  const today = new Date(
-    new Date().getFullYear(),
-    new Date().getMonth(),
-    new Date().getDate(),
-  );
-
-  const minDOB = new Date(
-    today.getFullYear() - 120,
-    today.getMonth(),
-    today.getDate() + 1,
-  );
-
-  const maxDOB = new Date(
-    today.getFullYear() - 13,
-    today.getMonth(),
-    today.getDate() - 1,
-  );
+  const { impactHaptics } = useHaptics();
 
   return (
     <>
@@ -83,14 +68,17 @@ const DateController = <T extends Record<string, any>>({
                       editable={false}
                     />
                     <View
-                      className="absolute right-2 "
+                      className="absolute right-2"
                       style={{ opacity: isPressed ? 0.5 : 1 }}
                     >
                       <InputIcon as={CalendarDaysIcon} size="sm" />
                     </View>
                   </Input>
                   <Pressable
-                    onPress={() => setShowDatePicker(true)}
+                    onPress={() => {
+                      if (Platform.OS === "android") setShowDatePicker(true);
+                      else bottomSheetRef.current?.snapToIndex(0);
+                    }}
                     onPressIn={() => {
                       Keyboard.dismiss();
                       setIsPressed(true);
@@ -111,7 +99,7 @@ const DateController = <T extends Record<string, any>>({
                   </FormControlError>
                 )}
               </FormControl>
-              {showDatePicker && (
+              {showDatePicker && Platform.OS === "android" && (
                 <DateTimePicker
                   mode="date"
                   value={field.value || maxDOB}
@@ -119,12 +107,7 @@ const DateController = <T extends Record<string, any>>({
                   maximumDate={maxDOB}
                   onChange={(event, selectedDate) => {
                     setShowDatePicker(false);
-                    if (event.type === "dismissed") return;
-
-                    if (selectedDate) {
-                      field.onChange(selectedDate);
-                      notificationHaptics("success");
-                    }
+                    handleDateChange(event, selectedDate);
                   }}
                 />
               )}
