@@ -59,7 +59,7 @@ const Login = () => {
           >
             {isSubmitting && <ButtonSpinner className="text-white" />}
             <ButtonText size="md">
-              {isSubmitting ? "Logging in..." : "Login"}
+              {isSubmitting ? "Logging in" : "Login"}
             </ButtonText>
           </Button>
           <Button

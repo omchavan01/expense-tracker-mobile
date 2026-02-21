@@ -104,7 +104,7 @@ const VerifyOTP = () => {
           >
             {isSubmitting && <ButtonSpinner className="text-white" />}
             <ButtonText size="md">
-              {isSubmitting ? "Verifying OTP..." : "Verify OTP"}
+              {isSubmitting ? "Verifying OTP" : "Verify OTP"}
             </ButtonText>
           </Button>
 

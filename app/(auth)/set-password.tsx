@@ -54,7 +54,7 @@ const SetPassword = () => {
           >
             {isSubmitting && <ButtonSpinner className="text-white" />}
             <ButtonText size="md">
-              {isSubmitting ? "Setting password..." : "Set Password"}
+              {isSubmitting ? "Setting password" : "Set Password"}
             </ButtonText>
           </Button>
         </View>

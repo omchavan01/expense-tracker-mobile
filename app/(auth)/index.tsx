@@ -36,7 +36,7 @@ const AuthIndex = () => {
             size="xl"
             className="rounded-full w-[75%] bg-primary-500"
             onPress={() => {
-              router.push("/create-account");
+              router.push("/onboarding-occupation-info");
             }}
             disabled={!isConnected}
             onPressIn={() => impactHaptics("light")}
@@ -50,7 +50,7 @@ const AuthIndex = () => {
             size="xl"
             className="rounded-full w-[75%] border-white"
             onPress={() => {
-              router.push("/login");
+              router.push("/onboarding-basic-info");
             }}
             disabled={!isConnected}
             onPressIn={() => impactHaptics("light")}

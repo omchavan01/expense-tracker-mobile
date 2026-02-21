@@ -43,7 +43,7 @@ const CreateAccount = () => {
           >
             {isSubmitting && <ButtonSpinner className="text-white" />}
             <ButtonText size="md">
-              {isSubmitting ? "Sending OTP..." : "Create Account"}
+              {isSubmitting ? "Sending OTP" : "Create Account"}
             </ButtonText>
           </Button>
           <Button

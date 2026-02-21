@@ -13,14 +13,12 @@ import DatePickerSheet from "@/components/common/sheet/date-picker-sheet";
 import NoInternet from "@/components/common/no-internet";
 import useOnboardingBasicInfo from "@/hooks/onboarding/use-basic-info";
 import { useNetInfo } from "@/contexts/net-info-provider";
-import { useHaptics } from "@/utils/lib/haptics";
 import { minDOB, maxDOB } from "@/utils/schemas/onboarding/form-schema";
 
 const OnboardingBasicInfo = () => {
   const bottomSheetRef = useRef<BottomSheet | null>(null);
   const dateBottomSheetRef = useRef<BottomSheet | null>(null);
   const { isConnected } = useNetInfo();
-  const { notificationHaptics } = useHaptics();
   const {
     control,
     setValue,
@@ -38,10 +36,9 @@ const OnboardingBasicInfo = () => {
       if (event.type === "dismissed") return;
       if (selectedDate) {
         setValue("dateOfBirth", selectedDate);
-        notificationHaptics("success");
       }
     },
-    [setValue, notificationHaptics],
+    [setValue],
   );
 
   return (
@@ -96,7 +93,7 @@ const OnboardingBasicInfo = () => {
           >
             {isSubmitting && <ButtonSpinner className="text-white" />}
             <ButtonText size="md">
-              {isSubmitting ? "Submitting..." : "Continue"}
+              {isSubmitting ? "Submitting" : "Continue"}
             </ButtonText>
           </Button>
         </View>

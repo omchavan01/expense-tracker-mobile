@@ -55,7 +55,6 @@ export interface DropdownSheetProps<T> {
   selectedValue: T;
   onSelect: (value: T) => void;
   searchEnabled?: boolean;
-  isScrollable?: boolean;
 }
 
 export interface DatePickerSheetProps {
@@ -96,7 +95,6 @@ export interface OnboardingCategoryBoxProps {
   handleSelectCategory: (option: OnboardingCategoryOption) => void;
   handleUnselectCategory: (option: OnboardingCategoryOption) => void;
   handleDeleteCategory: (option: OnboardingCategoryOption) => void;
-  handleResetCategories: () => void;
   handleAddCategory: () => void;
   canUnselectOrDelete: boolean;
   canSelectMore: boolean;

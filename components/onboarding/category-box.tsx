@@ -116,11 +116,13 @@ const CategoryPill = ({
   };
 
   return (
-    <View className={`flex flex-row items-center gap-2 ${pillClass}`}>
-      <TouchableOpacity
+    <TouchableOpacity
+      onPress={handleToggle}
+      activeOpacity={0.7}
+      className={`flex flex-row items-center gap-2 ${pillClass}`}
+    >
+      <View
         className={`flex flex-row items-center gap-2 ${!canToggle && "opacity-60"}`}
-        onPress={handleToggle}
-        activeOpacity={0.7}
       >
         <Icon
           as={category.isSelected ? CheckCircleIcon : CircleIcon}
@@ -128,7 +130,7 @@ const CategoryPill = ({
           className={iconClass}
         />
         <Text className={textClass}>{category.label}</Text>
-      </TouchableOpacity>
+      </View>
       <TouchableOpacity
         onPress={() => onDelete(category)}
         hitSlop={8}
@@ -137,7 +139,7 @@ const CategoryPill = ({
       >
         <Icon as={CloseIcon} size="sm" className="text-slate-500" />
       </TouchableOpacity>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -146,14 +148,13 @@ const OnboardingCategoryBox = ({
   handleDeleteCategory,
   handleSelectCategory,
   handleUnselectCategory,
-  handleResetCategories,
   handleAddCategory,
   canUnselectOrDelete,
   canSelectMore,
   canCreateCategory,
 }: OnboardingCategoryBoxProps) => {
   return (
-    <View className="min-h-[320px] max-h-[40vh] w-full bg-background-100 rounded-lg p-4">
+    <View className="min-h-[350px] max-h-[40vh] w-full bg-background-50 rounded-lg p-4">
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
@@ -177,13 +178,6 @@ const OnboardingCategoryBox = ({
         ))}
       </ScrollView>
       <View className="flex flex-row items-center justify-end gap-2 mt-4">
-        <TouchableOpacity
-          activeOpacity={0.5}
-          className="rounded border border-error-300 bg-transparent px-4 h-9 flex-row items-center justify-center gap-2"
-          onPress={handleResetCategories}
-        >
-          <Text className="text-error-500 text-sm font-semibold">Reset</Text>
-        </TouchableOpacity>
         <Button
           variant="outline"
           size="sm"

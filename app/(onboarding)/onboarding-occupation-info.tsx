@@ -88,7 +88,7 @@ const OnboardingOccupationInfo = () => {
           >
             {isSubmitting && <ButtonSpinner className="text-white" />}
             <ButtonText size="md">
-              {isSubmitting ? "Submitting..." : "Continue"}
+              {isSubmitting ? "Submitting" : "Continue"}
             </ButtonText>
           </Button>
         </View>
