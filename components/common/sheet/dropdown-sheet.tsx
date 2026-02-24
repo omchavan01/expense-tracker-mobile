@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/radio";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { CircleIcon, CloseIcon, Icon, SearchIcon } from "@/components/ui/icon";
+import { Loader } from "@/components/common/loader";
 import { DropdownOption, DropdownSheetProps } from "@/utils/lib/types";
 
 const DropdownSheet = <T,>({
@@ -31,6 +32,7 @@ const DropdownSheet = <T,>({
   selectedValue,
   onSelect,
   searchEnabled = false,
+  isLoading = false,
 }: DropdownSheetProps<T>) => {
   const snapPoints = useMemo(() => snapPointsList, [snapPointsList]);
 
@@ -109,58 +111,62 @@ const DropdownSheet = <T,>({
             </InputSlot>
           </Input>
         )}
-        <ScrollView
-          className="flex-1 mt-4"
-          showsVerticalScrollIndicator={false}
-        >
-          <RadioGroup>
-            <FlashList<DropdownOption>
-              data={filteredOptions}
-              keyExtractor={(item) => String(item.value)}
-              extraData={selectedValue}
-              showsVerticalScrollIndicator={false}
-              keyboardShouldPersistTaps="handled"
-              renderItem={({ item }) => {
-                const isSelected = selectedValue === item.value;
-                return (
-                  <View
-                    className={`
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <ScrollView
+            className="flex-1 mt-4"
+            showsVerticalScrollIndicator={false}
+          >
+            <RadioGroup>
+              <FlashList<DropdownOption>
+                data={filteredOptions}
+                keyExtractor={(item) => String(item.value)}
+                extraData={selectedValue}
+                showsVerticalScrollIndicator={false}
+                keyboardShouldPersistTaps="handled"
+                renderItem={({ item }) => {
+                  const isSelected = selectedValue === item.value;
+                  return (
+                    <View
+                      className={`
                     flex-row items-center rounded-xl mb-4
                     ${isSelected ? "bg-primary-50 border border-primary-200" : "border border-outline-50"}
                     `}
-                  >
-                    <Radio
-                      value={String(item.value)}
-                      data-checked={isSelected}
-                      onPress={() => handleOptionSelect(item.value as T)}
-                      className="flex-1 px-4 py-4"
                     >
-                      <RadioIndicator
+                      <Radio
+                        value={String(item.value)}
                         data-checked={isSelected}
-                        className="mr-2"
+                        onPress={() => handleOptionSelect(item.value as T)}
+                        className="flex-1 px-4 py-4"
                       >
-                        <RadioIcon as={CircleIcon} size="sm" />
-                      </RadioIndicator>
-                      <RadioLabel
-                        data-checked={isSelected}
-                        className={`text-base flex-1 ${isSelected && "font-medium"}`}
-                      >
-                        {item.label}
-                      </RadioLabel>
-                    </Radio>
-                  </View>
-                );
-              }}
-              ListEmptyComponent={() => {
-                return (
-                  <Text className="text-center text-base text-typography-400">
-                    No options found
-                  </Text>
-                );
-              }}
-            />
-          </RadioGroup>
-        </ScrollView>
+                        <RadioIndicator
+                          data-checked={isSelected}
+                          className="mr-2"
+                        >
+                          <RadioIcon as={CircleIcon} size="sm" />
+                        </RadioIndicator>
+                        <RadioLabel
+                          data-checked={isSelected}
+                          className={`text-base flex-1 ${isSelected && "font-medium"}`}
+                        >
+                          {item.label}
+                        </RadioLabel>
+                      </Radio>
+                    </View>
+                  );
+                }}
+                ListEmptyComponent={() => {
+                  return (
+                    <Text className="text-center text-base text-typography-400">
+                      No options found
+                    </Text>
+                  );
+                }}
+              />
+            </RadioGroup>
+          </ScrollView>
+        )}
       </View>
     </BottomSheet>
   );

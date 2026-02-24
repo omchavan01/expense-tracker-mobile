@@ -55,6 +55,7 @@ export interface DropdownSheetProps<T> {
   selectedValue: T;
   onSelect: (value: T) => void;
   searchEnabled?: boolean;
+  isLoading?: boolean;
 }
 
 export interface DatePickerSheetProps {

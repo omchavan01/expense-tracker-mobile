@@ -1,4 +1,5 @@
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,7 +10,6 @@ import {
   onboardingBasicInfoSchema,
   OnboardingBasicInfoType,
 } from "@/utils/schemas/onboarding/onboarding-schema";
-import { GenderEnum } from "@/utils/enum/gender-enum";
 import { useHaptics } from "@/utils/lib/haptics";
 import { useShowToast } from "@/utils/lib/show-toast";
 import { getErrorMessage } from "@/utils/lib/error-helper";
@@ -29,31 +29,63 @@ const useOnboardingBasicInfo = () => {
     defaultValues: defaultOnboardingBasicInfoValues,
   });
 
-  const genderValue = watch("gender");
-  const dateOfBirthValue = watch("dateOfBirth");
+  const currencyValue = watch("currency");
 
-  const handleGenderSelect = useCallback(
-    (value: GenderEnum) => {
-      setValue("gender", value);
+  const handleCurrencySelect = useCallback(
+    (value: string) => {
+      setValue("currency", value);
     },
     [setValue],
   );
 
-  const formatDateToYYYYMMDD = (date: Date): string => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  };
+  const currencyDetails = useCallback(async () => {
+    try {
+      const { data } = await axiosInstance.get(
+        "https://restcountries.com/v3.1/all?fields=currencies",
+      );
+      const currencyMap = new Map();
+
+      data.forEach((item: any) => {
+        if (!item.currencies) return;
+
+        Object.entries(item.currencies).forEach(
+          ([code, details]: [string, any]) => {
+            if (!currencyMap.has(code)) {
+              const capitalizedName = details.name
+                .split(" ")
+                .map(
+                  (word: string) =>
+                    word.charAt(0).toUpperCase() + word.slice(1),
+                )
+                .join(" ");
+              currencyMap.set(code, {
+                label: `${code} - ${capitalizedName}`,
+                value: code,
+              });
+            }
+          },
+        );
+      });
+
+      const sortedCurrencies = Array.from(currencyMap.values()).sort((a, b) => {
+        return a.label.localeCompare(b.label);
+      });
+      return sortedCurrencies;
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  }, []);
+
+  const { data: currencyOptions, isLoading: isCurrencyOptionsLoading } =
+    useQuery({
+      queryKey: ["currencyOptions"],
+      queryFn: currencyDetails,
+    });
 
   const onSubmit = async (payload: OnboardingBasicInfoType) => {
     const formattedPayload = {
-      basicInfo: {
-        ...payload,
-        dateOfBirth: payload?.dateOfBirth
-          ? formatDateToYYYYMMDD(payload.dateOfBirth)
-          : undefined,
-      },
+      basicInfo: payload,
     };
     try {
       const { data } = await axiosInstance.post(
@@ -77,25 +109,15 @@ const useOnboardingBasicInfo = () => {
     }
   };
 
-  const genderOptions = useMemo(
-    () => [
-      { label: "Male", value: GenderEnum.MALE },
-      { label: "Female", value: GenderEnum.FEMALE },
-      { label: "Others", value: GenderEnum.OTHERS },
-    ],
-    [],
-  );
-
   return {
     control,
-    setValue,
+    currencyValue,
+    handleCurrencySelect,
     handleSubmit,
     onSubmit,
     isSubmitting,
-    dateOfBirthValue,
-    genderOptions,
-    genderValue,
-    handleGenderSelect,
+    currencyOptions,
+    isCurrencyOptionsLoading,
   };
 };
 
