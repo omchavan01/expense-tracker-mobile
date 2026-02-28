@@ -88,8 +88,11 @@ export interface HapticsProps {
   notificationType: "success" | "warning" | "error";
 }
 
+export type CategoryType = "expense" | "income";
+
 export interface OnboardingCategoryOption extends DropdownOption {
   isSelected: boolean;
+  categoryType: CategoryType;
 }
 export interface OnboardingCategoryBoxProps {
   categoryOptions: OnboardingCategoryOption[];
