@@ -3,21 +3,16 @@ import { z } from "zod";
 import {
   firstNameSchema,
   lastNameSchema,
-  dateOfBirthSchema,
-  genderSchema,
-  jobTitleSchema,
-  companyNameSchema,
-  countrySchema,
-  incomeCycleSchema,
-  incomeSchema,
+  currencySchema,
+  currentBalanceSchema,
   categoryNameSchema,
 } from "./form-schema";
 
 const onboardingBasicInfoSchema = z.object({
   firstName: firstNameSchema,
   lastName: lastNameSchema,
-  dateOfBirth: dateOfBirthSchema,
-  gender: genderSchema,
+  currencyCode: currencySchema,
+  currentBalance: currentBalanceSchema,
 });
 
 type OnboardingBasicInfoType = z.infer<typeof onboardingBasicInfoSchema>;
@@ -25,28 +20,8 @@ type OnboardingBasicInfoType = z.infer<typeof onboardingBasicInfoSchema>;
 const defaultOnboardingBasicInfoValues: OnboardingBasicInfoType = {
   firstName: "",
   lastName: "",
-  dateOfBirth: undefined,
-  gender: undefined,
-};
-
-const onboardingOccupationInfoSchema = z.object({
-  jobTitle: jobTitleSchema,
-  companyName: companyNameSchema,
-  country: countrySchema,
-  incomeCycle: incomeCycleSchema,
-  income: incomeSchema,
-});
-
-type OnboardingOccupationInfoType = z.infer<
-  typeof onboardingOccupationInfoSchema
->;
-
-const defaultOnboardingOccupationInfoValues: OnboardingOccupationInfoType = {
-  jobTitle: "",
-  companyName: "",
-  country: "",
-  incomeCycle: undefined,
-  income: "",
+  currencyCode: "",
+  currentBalance: "",
 };
 
 const onboardingCategoryInfoSchema = z.object({
@@ -61,12 +36,9 @@ const defaultOnboardingCategoryInfoValues: OnboardingCategoryInfoType = {
 
 export {
   onboardingBasicInfoSchema,
-  onboardingOccupationInfoSchema,
   onboardingCategoryInfoSchema,
   OnboardingBasicInfoType,
-  OnboardingOccupationInfoType,
   OnboardingCategoryInfoType,
   defaultOnboardingBasicInfoValues,
-  defaultOnboardingOccupationInfoValues,
   defaultOnboardingCategoryInfoValues,
 };

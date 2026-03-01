@@ -47,6 +47,18 @@ const Login = () => {
               isMandatory={false}
             />
           </View>
+          <Button
+            onPress={() => {
+              router.push("/forgot-password");
+            }}
+            variant="link"
+            disabled={!isConnected}
+            className="flex justify-end -mt-2"
+          >
+            <ButtonText size="xs" className="text-typography-300">
+              Forgot your password?
+            </ButtonText>
+          </Button>
         </KeyboardAwareScrollView>
         <View className="py-10 w-full flex justify-center items-center">
           <Button

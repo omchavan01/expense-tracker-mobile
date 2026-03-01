@@ -12,7 +12,14 @@ import { useNetInfo } from "@/contexts/net-info-provider";
 const SetPassword = () => {
   const { isConnected } = useNetInfo();
   const { impactHaptics } = useHaptics();
-  const { control, handleSubmit, onSubmit, isSubmitting } = useSetPassword();
+  const {
+    control,
+    handleSubmit,
+    onSubmit,
+    isSubmitting,
+    handleResetPassword,
+    isResetPassword,
+  } = useSetPassword();
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -45,7 +52,11 @@ const SetPassword = () => {
         </KeyboardAwareScrollView>
         <View className="py-10 w-full flex justify-center items-center">
           <Button
-            onPress={handleSubmit(onSubmit)}
+            onPress={
+              isResetPassword
+                ? handleSubmit(handleResetPassword)
+                : handleSubmit(onSubmit)
+            }
             onPressIn={() => impactHaptics("light")}
             variant="solid"
             size="xl"

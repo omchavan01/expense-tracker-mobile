@@ -12,10 +12,11 @@ import { useShowToast } from "@/utils/lib/show-toast";
 import { useHaptics } from "@/utils/lib/haptics";
 import { getErrorMessage } from "@/utils/lib/error-helper";
 
-const useCreateAccount = () => {
+const useForgotPassword = () => {
   const router = useRouter();
   const showToast = useShowToast();
   const { notificationHaptics } = useHaptics();
+  // Using createAccountSchema because the fields are the same
   const {
     control,
     handleSubmit,
@@ -28,7 +29,7 @@ const useCreateAccount = () => {
   const onSubmit = async (payload: CreateAccountType) => {
     try {
       const { data } = await axiosInstance.post(
-        "/auth/new-user/send-otp",
+        "/auth/reset-password/send-otp",
         payload,
       );
       showToast({
@@ -37,7 +38,10 @@ const useCreateAccount = () => {
       });
       router.push({
         pathname: "/verify-otp",
-        params: { email: payload.email },
+        params: {
+          email: payload.email,
+          isResetPassword: "true",
+        },
       });
     } catch (error: any) {
       showToast({
@@ -51,4 +55,4 @@ const useCreateAccount = () => {
   return { control, handleSubmit, onSubmit, isSubmitting };
 };
 
-export default useCreateAccount;
+export default useForgotPassword;

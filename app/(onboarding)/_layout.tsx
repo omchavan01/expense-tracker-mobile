@@ -18,7 +18,7 @@ export default function OnboardingLayout() {
           >
             <Stack.Screen name="index" />
             <Stack.Screen name="onboarding-basic-info" />
-            <Stack.Screen name="onboarding-occupation-info" />
+            <Stack.Screen name="onboarding-category-info" />
           </Stack>
         </NetInfoProvider>
       </SafeAreaView>

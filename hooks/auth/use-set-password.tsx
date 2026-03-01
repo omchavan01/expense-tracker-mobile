@@ -14,7 +14,10 @@ import { useHaptics } from "@/utils/lib/haptics";
 import { getErrorMessage } from "@/utils/lib/error-helper";
 
 const useSetPassword = () => {
-  const { email } = useLocalSearchParams<{ email: string }>();
+  const { email, isResetPassword = "false" } = useLocalSearchParams<{
+    email: string;
+    isResetPassword?: string;
+  }>();
   const router = useRouter();
   const showToast = useShowToast();
   const { setAuthTokensAndExpiry } = useAuth();
@@ -58,7 +61,35 @@ const useSetPassword = () => {
     }
   };
 
-  return { control, handleSubmit, onSubmit, isSubmitting };
+  const handleResetPassword = async (payload: SetPasswordType) => {
+    try {
+      const { data } = await axiosInstance.post(
+        "/auth/reset-password",
+        payload,
+      );
+      showToast({
+        title: data.message,
+        type: "success",
+      });
+      notificationHaptics("success");
+      router.replace("/login");
+    } catch (error: any) {
+      showToast({
+        title: getErrorMessage(error),
+        type: "error",
+      });
+      notificationHaptics("error");
+    }
+  };
+
+  return {
+    control,
+    handleSubmit,
+    onSubmit,
+    isSubmitting,
+    handleResetPassword,
+    isResetPassword: isResetPassword === "true" ? true : false,
+  };
 };
 
 export default useSetPassword;

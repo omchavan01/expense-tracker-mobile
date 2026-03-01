@@ -12,12 +12,32 @@ import {
 import { useHaptics } from "@/utils/lib/haptics";
 import { useShowToast } from "@/utils/lib/show-toast";
 import { getErrorMessage } from "@/utils/lib/error-helper";
-import { OnboardingCategoryOption } from "@/utils/lib/types";
-import { onboardingCategoryList } from "@/constants/json/onboarding-category-list";
+import { CategoryType, OnboardingCategoryOption } from "@/utils/lib/types";
+import {
+  onboardingExpenseCategoryList,
+  onboardingIncomeCategoryList,
+} from "@/constants/json/onboarding-category-list";
 
-const MIN_SELECTED_CATEGORIES = 5;
-const MAX_SELECTED_CATEGORIES = 15;
-const MAX_TOTAL_CATEGORIES = 30;
+export const CATEGORY_TYPE_OPTIONS: {
+  label: string;
+  value: CategoryType;
+}[] = [
+  { label: "Expense", value: "expense" },
+  { label: "Income", value: "income" },
+];
+
+const CATEGORY_CONFIG = {
+  expense: {
+    minSelected: 5,
+    maxSelected: 15,
+    maxTotal: 30,
+  },
+  income: {
+    minSelected: 1,
+    maxSelected: 5,
+    maxTotal: 10,
+  },
+};
 
 const useOnboardingCategoryInfo = () => {
   const router = useRouter();
@@ -31,20 +51,37 @@ const useOnboardingCategoryInfo = () => {
 
   const [newCategoryModalOpen, setNewCategoryModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [categoryOptions, setCategoryOptions] = useState<
+  const [categoryType, setCategoryType] = useState<CategoryType>("expense");
+  const [expenseCategoryOptions, setExpenseCategoryOptions] = useState<
     OnboardingCategoryOption[]
-  >(onboardingCategoryList);
+  >(onboardingExpenseCategoryList as OnboardingCategoryOption[]);
+  const [incomeCategoryOptions, setIncomeCategoryOptions] = useState<
+    OnboardingCategoryOption[]
+  >(onboardingIncomeCategoryList as OnboardingCategoryOption[]);
+
+  /** Configuration for the category type based on which all the operations are performed */
+  const config = CATEGORY_CONFIG[categoryType];
+  const currentOptions =
+    categoryType === "expense" ? expenseCategoryOptions : incomeCategoryOptions;
+  const setCurrentOptions =
+    categoryType === "expense"
+      ? setExpenseCategoryOptions
+      : setIncomeCategoryOptions;
 
   const selectedCount = useMemo(
-    () => categoryOptions.filter((category) => category.isSelected).length,
-    [categoryOptions],
+    () => currentOptions.filter((category) => category.isSelected).length,
+    [currentOptions],
   );
-  const canUnselectOrDelete = selectedCount > MIN_SELECTED_CATEGORIES;
-  const canSelectMore = selectedCount < MAX_SELECTED_CATEGORIES;
-  const canCreateCategory = categoryOptions.length < MAX_TOTAL_CATEGORIES;
+  const canUnselectOrDelete = selectedCount > config.minSelected;
+  const canSelectMore = selectedCount < config.maxSelected;
+  const canCreateCategory = currentOptions.length < config.maxTotal;
+
+  const handleCategoryTypeSelect = (type: CategoryType) => {
+    setCategoryType(type);
+  };
 
   const onCreateCategory = (payload: OnboardingCategoryInfoType) => {
-    if (categoryOptions.length >= MAX_TOTAL_CATEGORIES) {
+    if (currentOptions.length >= config.maxTotal) {
       showToast({
         title: "You've added quite a few categories",
         description: "Delete one to add another",
@@ -52,23 +89,25 @@ const useOnboardingCategoryInfo = () => {
       });
       return;
     }
+
     if (
-      categoryOptions.find(
+      currentOptions.find(
         (category) =>
-          category.value.toLowerCase() === payload.categoryName.toLowerCase(),
+          category.value ===
+          payload.categoryName.split(" ").join("-").toLowerCase(),
       )
     ) {
       setError("categoryName", { message: "Category already exists" });
       return;
     }
-    const selectNewCategory = selectedCount < MAX_SELECTED_CATEGORIES;
-    setCategoryOptions((prev) => {
+    const selectNewCategory = selectedCount < config.maxSelected;
+    setCurrentOptions((prev) => {
       const newCategory = {
         label: payload.categoryName,
-        value: payload.categoryName,
+        value: payload.categoryName.split(" ").join("-").toLowerCase(),
         isSelected: selectNewCategory,
+        categoryType: categoryType as CategoryType,
       };
-
       if (selectNewCategory) return [newCategory, ...prev];
       return [...prev, newCategory];
     });
@@ -76,7 +115,7 @@ const useOnboardingCategoryInfo = () => {
   };
 
   const handleSelectCategory = (option: OnboardingCategoryOption) => {
-    if (selectedCount >= MAX_SELECTED_CATEGORIES) {
+    if (selectedCount >= config.maxSelected) {
       showToast({
         title: "You've reached the limit",
         description: "Unselect one to add another",
@@ -84,7 +123,7 @@ const useOnboardingCategoryInfo = () => {
       });
       return;
     }
-    setCategoryOptions((prev) =>
+    setCurrentOptions((prev) =>
       prev.map((category) => ({
         ...category,
         isSelected:
@@ -94,15 +133,15 @@ const useOnboardingCategoryInfo = () => {
   };
 
   const handleUnselectCategory = (option: OnboardingCategoryOption) => {
-    if (selectedCount <= MIN_SELECTED_CATEGORIES) {
+    if (selectedCount <= config.minSelected) {
       showToast({
-        title: "At least 5 categories are needed",
+        title: `At least ${config.minSelected} ${categoryType} categories are needed`,
         description: "Add one before removing",
         type: "error",
       });
       return;
     }
-    setCategoryOptions((prev) =>
+    setCurrentOptions((prev) =>
       prev.map((category) => ({
         ...category,
         isSelected:
@@ -112,15 +151,15 @@ const useOnboardingCategoryInfo = () => {
   };
 
   const handleDeleteCategory = (option: OnboardingCategoryOption) => {
-    if (option.isSelected && selectedCount <= MIN_SELECTED_CATEGORIES) {
+    if (option.isSelected && selectedCount <= config.minSelected) {
       showToast({
-        title: "At least 5 categories are needed",
+        title: `At least ${config.minSelected} ${categoryType} categories are needed`,
         description: "Add one before deleting",
         type: "error",
       });
       return;
     }
-    setCategoryOptions((prev) =>
+    setCurrentOptions((prev) =>
       prev.filter((category) => category.value !== option.value),
     );
   };
@@ -136,51 +175,68 @@ const useOnboardingCategoryInfo = () => {
   };
 
   const sortedCategoryOptions = useMemo(() => {
-    return [...categoryOptions].sort(
+    return [...currentOptions].sort(
       (a, b) => Number(b.isSelected) - Number(a.isSelected),
     );
-  }, [categoryOptions]);
+  }, [currentOptions]);
 
   const handleMessageAndColor = useMemo(() => {
-    if (categoryOptions.length === MAX_TOTAL_CATEGORIES)
+    if (currentOptions.length === config.maxTotal) {
       return {
-        message: `You've created ${MAX_TOTAL_CATEGORIES} categories. You can't create more.`,
+        message: `You've created ${config.maxTotal} ${categoryType} categories. You can't create more.`,
         color: "text-error-500",
       };
-
-    if (selectedCount === MAX_SELECTED_CATEGORIES)
+    }
+    if (selectedCount === config.maxSelected) {
       return {
-        message: `${MAX_SELECTED_CATEGORIES} categories selected. You can't select more.`,
+        message: `You've selected ${config.maxSelected} ${categoryType} categories. You can't select more.`,
         color: "text-amber-500",
       };
-
+    }
     return {
-      message: `${selectedCount} categories selected`,
+      message: `${selectedCount} ${categoryType} categories selected`,
       color: "text-gray-500",
     };
-  }, [categoryOptions.length, selectedCount]);
+  }, [
+    categoryType,
+    config.maxSelected,
+    config.maxTotal,
+    currentOptions.length,
+    selectedCount,
+  ]);
 
-  const onSubmit = async (payload: OnboardingCategoryOption[]) => {
-    if (
-      payload.filter((category) => category.isSelected).length <
-      MIN_SELECTED_CATEGORIES
-    ) {
+  const onSubmit = async (
+    expensePayload: OnboardingCategoryOption[],
+    incomePayload: OnboardingCategoryOption[],
+  ) => {
+    const expenseSelected = expensePayload.filter((c) => c.isSelected).length;
+    const incomeSelected = incomePayload.filter((c) => c.isSelected).length;
+
+    if (expenseSelected < CATEGORY_CONFIG.expense.minSelected) {
       showToast({
         title: "Almost there",
-        description: "Select at least 5 categories to continue.",
+        description: `Select at least ${CATEGORY_CONFIG.expense.minSelected} expense categories to continue.`,
+        type: "error",
+      });
+      return;
+    }
+
+    if (incomeSelected < CATEGORY_CONFIG.income.minSelected) {
+      showToast({
+        title: "Almost there",
+        description: `Select at least ${CATEGORY_CONFIG.income.minSelected} income categories to continue.`,
         type: "error",
       });
       return;
     }
     const formattedPayload = {
-      categoriesInfo: payload.map((category) => ({
+      categoriesInfo: [...expensePayload, ...incomePayload].map((category) => ({
         title: category.label,
         value: category.value,
         active: category.isSelected,
+        categoryType: category.categoryType,
       })),
     };
-
-    console.log("formattedPayload", JSON.stringify(formattedPayload, null, 2));
 
     try {
       setIsSubmitting(true);
@@ -188,7 +244,6 @@ const useOnboardingCategoryInfo = () => {
         "/onboarding/categories-info",
         formattedPayload,
       );
-      console.log("data", data);
       showToast({
         title: data.message,
         type: "success",
@@ -196,7 +251,7 @@ const useOnboardingCategoryInfo = () => {
       notificationHaptics("success");
       router.replace("/(logged)");
     } catch (error: any) {
-      console.log("error", error);
+      console.log("error", getErrorMessage(error));
       showToast({
         title: getErrorMessage(error),
         type: "error",
@@ -210,19 +265,22 @@ const useOnboardingCategoryInfo = () => {
   return {
     control,
     isSubmitting,
-    categoryOptions,
+    categoryType,
+    expenseCategoryOptions,
+    incomeCategoryOptions,
     sortedCategoryOptions,
     newCategoryModalOpen,
     setNewCategoryModalOpen,
     handleSubmit,
+    handleCategoryTypeSelect,
     onCreateCategory,
     handleSelectCategory,
     handleUnselectCategory,
     handleDeleteCategory,
     handleCloseModal,
     handleClearCategoryName,
-    handleMessageAndColor,
     onSubmit,
+    handleMessageAndColor,
     canUnselectOrDelete,
     canSelectMore,
     canCreateCategory,

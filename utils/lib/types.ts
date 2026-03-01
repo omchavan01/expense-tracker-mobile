@@ -55,6 +55,7 @@ export interface DropdownSheetProps<T> {
   selectedValue: T;
   onSelect: (value: T) => void;
   searchEnabled?: boolean;
+  isLoading?: boolean;
 }
 
 export interface DatePickerSheetProps {
@@ -87,8 +88,11 @@ export interface HapticsProps {
   notificationType: "success" | "warning" | "error";
 }
 
+export type CategoryType = "expense" | "income";
+
 export interface OnboardingCategoryOption extends DropdownOption {
   isSelected: boolean;
+  categoryType: CategoryType;
 }
 export interface OnboardingCategoryBoxProps {
   categoryOptions: OnboardingCategoryOption[];

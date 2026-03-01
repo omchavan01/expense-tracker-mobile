@@ -13,7 +13,10 @@ import { useHaptics } from "@/utils/lib/haptics";
 import { getErrorMessage } from "@/utils/lib/error-helper";
 
 const useVerifyOTP = () => {
-  const { email } = useLocalSearchParams<{ email: string }>();
+  const { email, isResetPassword = "false" } = useLocalSearchParams<{
+    email: string;
+    isResetPassword?: string;
+  }>();
   const router = useRouter();
   const showToast = useShowToast();
   const { notificationHaptics } = useHaptics();
@@ -40,7 +43,10 @@ const useVerifyOTP = () => {
       });
       router.replace({
         pathname: "/set-password",
-        params: { email },
+        params: {
+          email,
+          isResetPassword,
+        },
       });
     } catch (error: any) {
       setError("otp", {
