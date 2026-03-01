@@ -93,7 +93,8 @@ const useOnboardingCategoryInfo = () => {
     if (
       currentOptions.find(
         (category) =>
-          category.value.toLowerCase() === payload.categoryName.toLowerCase(),
+          category.value ===
+          payload.categoryName.split(" ").join("-").toLowerCase(),
       )
     ) {
       setError("categoryName", { message: "Category already exists" });
@@ -103,7 +104,7 @@ const useOnboardingCategoryInfo = () => {
     setCurrentOptions((prev) => {
       const newCategory = {
         label: payload.categoryName,
-        value: payload.categoryName,
+        value: payload.categoryName.split(" ").join("-").toLowerCase(),
         isSelected: selectNewCategory,
         categoryType: categoryType as CategoryType,
       };
@@ -250,7 +251,7 @@ const useOnboardingCategoryInfo = () => {
       notificationHaptics("success");
       router.replace("/(logged)");
     } catch (error: any) {
-      console.log("error", error);
+      console.log("error", getErrorMessage(error));
       showToast({
         title: getErrorMessage(error),
         type: "error",

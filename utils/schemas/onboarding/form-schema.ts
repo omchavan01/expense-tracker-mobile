@@ -10,9 +10,16 @@ const currencySchema = z.string().trim().min(1, {
   message: "Currency is required",
 });
 
-const currentMoneyInAccountSchema = z.string().trim().min(1, {
-  message: "Current account balance is required.",
-});
+const currentBalanceSchema = z
+  .string()
+  .trim()
+  .min(1, {
+    message: "Current account balance is required.",
+  })
+  .transform((value) => value.replace(/,/g, ""))
+  .refine((value) => /^\d+(\.\d{1,2})?$/.test(value), {
+    message: "Enter a valid amount (max 2 decimal places).",
+  });
 
 const categoryNameSchema = z
   .string()
@@ -47,6 +54,6 @@ export {
   firstNameSchema,
   lastNameSchema,
   currencySchema,
-  currentMoneyInAccountSchema,
+  currentBalanceSchema,
   categoryNameSchema,
 };

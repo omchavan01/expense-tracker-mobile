@@ -4,15 +4,15 @@ import {
   firstNameSchema,
   lastNameSchema,
   currencySchema,
-  currentMoneyInAccountSchema,
+  currentBalanceSchema,
   categoryNameSchema,
 } from "./form-schema";
 
 const onboardingBasicInfoSchema = z.object({
   firstName: firstNameSchema,
   lastName: lastNameSchema,
-  currency: currencySchema,
-  currentMoneyInAccount: currentMoneyInAccountSchema,
+  currencyCode: currencySchema,
+  currentBalance: currentBalanceSchema,
 });
 
 type OnboardingBasicInfoType = z.infer<typeof onboardingBasicInfoSchema>;
@@ -20,8 +20,8 @@ type OnboardingBasicInfoType = z.infer<typeof onboardingBasicInfoSchema>;
 const defaultOnboardingBasicInfoValues: OnboardingBasicInfoType = {
   firstName: "",
   lastName: "",
-  currency: "",
-  currentMoneyInAccount: "",
+  currencyCode: "",
+  currentBalance: "",
 };
 
 const onboardingCategoryInfoSchema = z.object({

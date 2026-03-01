@@ -29,64 +29,48 @@ const useOnboardingBasicInfo = () => {
     defaultValues: defaultOnboardingBasicInfoValues,
   });
 
-  const currencyValue = watch("currency");
+  const currencyCodeValue = watch("currencyCode");
+  const currentBalanceValue = watch("currentBalance");
+
+  const handleCurrentBalanceBlur = useCallback(() => {
+    const formatted = new Intl.NumberFormat("en-IN", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(Number(currentBalanceValue.replace(/,/g, "")));
+    setValue("currentBalance", formatted);
+  }, [currentBalanceValue, setValue]);
 
   const handleCurrencySelect = useCallback(
     (value: string) => {
-      setValue("currency", value);
+      setValue("currencyCode", value);
     },
     [setValue],
   );
 
-  const currencyDetails = useCallback(async () => {
+  const getCurrencyDetails = async () => {
     try {
-      const { data } = await axiosInstance.get(
-        "https://restcountries.com/v3.1/all?fields=currencies",
-      );
-      const currencyMap = new Map();
-
-      data.forEach((item: any) => {
-        if (!item.currencies) return;
-
-        Object.entries(item.currencies).forEach(
-          ([code, details]: [string, any]) => {
-            if (!currencyMap.has(code)) {
-              const capitalizedName = details.name
-                .split(" ")
-                .map(
-                  (word: string) =>
-                    word.charAt(0).toUpperCase() + word.slice(1),
-                )
-                .join(" ");
-              currencyMap.set(code, {
-                label: `${code} - ${capitalizedName}`,
-                value: code,
-              });
-            }
-          },
-        );
-      });
-
-      const sortedCurrencies = Array.from(currencyMap.values()).sort((a, b) => {
-        return a.label.localeCompare(b.label);
-      });
-      return sortedCurrencies;
+      const { data } = await axiosInstance.get("/metadata/currencies");
+      return data.result.map((item: any) => ({
+        label: item.name,
+        value: item.code,
+      }));
     } catch (error) {
-      console.error(error);
-      return [];
+      console.log(error);
+      return null;
     }
-  }, []);
+  };
 
   const { data: currencyOptions, isLoading: isCurrencyOptionsLoading } =
     useQuery({
       queryKey: ["currencyOptions"],
-      queryFn: currencyDetails,
+      queryFn: getCurrencyDetails,
     });
 
   const onSubmit = async (payload: OnboardingBasicInfoType) => {
     const formattedPayload = {
       basicInfo: payload,
     };
+    console.log(JSON.stringify(formattedPayload, null, 2), "formattedPayload");
     try {
       const { data } = await axiosInstance.post(
         "/onboarding/basic-info",
@@ -101,6 +85,7 @@ const useOnboardingBasicInfo = () => {
         params: { onboardingStep: String(data.result.onboardingStep) },
       });
     } catch (error: any) {
+      console.log(getErrorMessage(error), "error");
       showToast({
         title: getErrorMessage(error),
         type: "error",
@@ -111,8 +96,9 @@ const useOnboardingBasicInfo = () => {
 
   return {
     control,
-    currencyValue,
+    currencyCodeValue,
     handleCurrencySelect,
+    handleCurrentBalanceBlur,
     handleSubmit,
     onSubmit,
     isSubmitting,

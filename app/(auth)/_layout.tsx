@@ -14,6 +14,7 @@ export default function AuthLayout() {
           <Stack.Screen name="verify-otp" />
           <Stack.Screen name="set-password" />
           <Stack.Screen name="login" />
+          <Stack.Screen name="forgot-password" />
         </Stack>
       </NetInfoProvider>
     </>

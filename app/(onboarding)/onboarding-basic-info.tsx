@@ -16,8 +16,9 @@ const OnboardingBasicInfo = () => {
   const { isConnected } = useNetInfo();
   const {
     control,
-    currencyValue,
+    currencyCodeValue,
     handleCurrencySelect,
+    handleCurrentBalanceBlur,
     handleSubmit,
     onSubmit,
     isSubmitting,
@@ -51,7 +52,7 @@ const OnboardingBasicInfo = () => {
             />
             <DropdownController
               control={control}
-              name="currency"
+              name="currencyCode"
               label="Currency"
               placeholder="Select currency"
               bottomSheetRef={currencyBottomSheetRef}
@@ -59,10 +60,13 @@ const OnboardingBasicInfo = () => {
             />
             <FormController
               control={control}
-              name="currentMoneyInAccount"
+              name="currentBalance"
               label="Current account balance"
               placeholder="Enter your current account balance"
-              inputProps={{ keyboardType: "numeric" }}
+              inputProps={{
+                keyboardType: "numeric",
+                onBlur: handleCurrentBalanceBlur,
+              }}
             />
           </View>
         </KeyboardAwareScrollView>
@@ -85,7 +89,7 @@ const OnboardingBasicInfo = () => {
         title="Currency"
         bottomSheetRef={currencyBottomSheetRef}
         options={currencyOptions!}
-        selectedValue={currencyValue}
+        selectedValue={currencyCodeValue}
         onSelect={handleCurrencySelect}
         isLoading={isCurrencyOptionsLoading}
         searchEnabled={true}

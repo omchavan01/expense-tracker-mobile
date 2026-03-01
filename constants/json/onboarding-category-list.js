@@ -7,7 +7,7 @@ export const onboardingExpenseCategoryList = [
   },
   {
     label: "Restaurants & Dining",
-    value: "restaurants-dining",
+    value: "restaurants-&-dining",
     isSelected: true,
     categoryType: "expense",
   },
@@ -19,7 +19,7 @@ export const onboardingExpenseCategoryList = [
   },
   {
     label: "Rent & Housing",
-    value: "rent-housing",
+    value: "rent-&-housing",
     isSelected: true,
     categoryType: "expense",
   },
