@@ -249,7 +249,7 @@ const useOnboardingCategoryInfo = () => {
         type: "success",
       });
       notificationHaptics("success");
-      router.replace("/(logged)");
+      router.replace("/(tabs)/home");
     } catch (error: any) {
       console.log("error", getErrorMessage(error));
       showToast({

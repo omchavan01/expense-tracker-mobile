@@ -70,7 +70,6 @@ const useOnboardingBasicInfo = () => {
     const formattedPayload = {
       basicInfo: payload,
     };
-    console.log(JSON.stringify(formattedPayload, null, 2), "formattedPayload");
     try {
       const { data } = await axiosInstance.post(
         "/onboarding/basic-info",
