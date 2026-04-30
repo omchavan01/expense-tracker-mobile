@@ -83,7 +83,7 @@ const useOnboardingCategoryInfo = () => {
   const onCreateCategory = (payload: OnboardingCategoryInfoType) => {
     if (currentOptions.length >= config.maxTotal) {
       showToast({
-        title: "You've added quite a few categories",
+        title: `You've reached the limit of ${config.maxTotal} ${categoryType} categories`,
         description: "Delete one to add another",
         type: "error",
       });
@@ -97,7 +97,9 @@ const useOnboardingCategoryInfo = () => {
           payload.categoryName.split(" ").join("-").toLowerCase(),
       )
     ) {
-      setError("categoryName", { message: "Category already exists" });
+      setError("categoryName", {
+        message: "Category with this name already exists",
+      });
       return;
     }
     const selectNewCategory = selectedCount < config.maxSelected;
@@ -117,7 +119,7 @@ const useOnboardingCategoryInfo = () => {
   const handleSelectCategory = (option: OnboardingCategoryOption) => {
     if (selectedCount >= config.maxSelected) {
       showToast({
-        title: "You've reached the limit",
+        title: `You've reached the limit of ${config.maxSelected} ${categoryType} categories`,
         description: "Unselect one to add another",
         type: "error",
       });
@@ -135,7 +137,7 @@ const useOnboardingCategoryInfo = () => {
   const handleUnselectCategory = (option: OnboardingCategoryOption) => {
     if (selectedCount <= config.minSelected) {
       showToast({
-        title: `At least ${config.minSelected} ${categoryType} categories are needed`,
+        title: `You need to select at least ${config.minSelected} ${categoryType} categories`,
         description: "Add one before removing",
         type: "error",
       });
@@ -153,7 +155,7 @@ const useOnboardingCategoryInfo = () => {
   const handleDeleteCategory = (option: OnboardingCategoryOption) => {
     if (option.isSelected && selectedCount <= config.minSelected) {
       showToast({
-        title: `At least ${config.minSelected} ${categoryType} categories are needed`,
+        title: `You need to select at least ${config.minSelected} ${categoryType} categories`,
         description: "Add one before deleting",
         type: "error",
       });
@@ -179,31 +181,6 @@ const useOnboardingCategoryInfo = () => {
       (a, b) => Number(b.isSelected) - Number(a.isSelected),
     );
   }, [currentOptions]);
-
-  const handleMessageAndColor = useMemo(() => {
-    if (currentOptions.length === config.maxTotal) {
-      return {
-        message: `You've created ${config.maxTotal} ${categoryType} categories. You can't create more.`,
-        color: "text-error-500",
-      };
-    }
-    if (selectedCount === config.maxSelected) {
-      return {
-        message: `You've selected ${config.maxSelected} ${categoryType} categories. You can't select more.`,
-        color: "text-amber-500",
-      };
-    }
-    return {
-      message: `${selectedCount} ${categoryType} categories selected`,
-      color: "text-gray-500",
-    };
-  }, [
-    categoryType,
-    config.maxSelected,
-    config.maxTotal,
-    currentOptions.length,
-    selectedCount,
-  ]);
 
   const onSubmit = async (
     expensePayload: OnboardingCategoryOption[],
@@ -280,7 +257,6 @@ const useOnboardingCategoryInfo = () => {
     handleCloseModal,
     handleClearCategoryName,
     onSubmit,
-    handleMessageAndColor,
     canUnselectOrDelete,
     canSelectMore,
     canCreateCategory,

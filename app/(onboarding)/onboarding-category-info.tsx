@@ -3,6 +3,7 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 
 import { Button, ButtonText, ButtonSpinner } from "@/components/ui/button";
+import Header from "@/components/common/header";
 import NoInternet from "@/components/common/no-internet";
 import useOnboardingCategoryInfo, {
   CATEGORY_TYPE_OPTIONS,
@@ -31,7 +32,6 @@ const OnboardingCategoryInfo = () => {
     handleCloseModal,
     handleClearCategoryName,
     onSubmit,
-    handleMessageAndColor,
     canUnselectOrDelete,
     canSelectMore,
     canCreateCategory,
@@ -46,7 +46,7 @@ const OnboardingCategoryInfo = () => {
           contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
           showsVerticalScrollIndicator={false}
         >
-          <Text className="text-2xl font-bold mb-10">Category Information</Text>
+          <Header title="Category Information" />
           <View className="flex flex-row items-center justify-between bg-gray-100 rounded-full mb-4">
             {CATEGORY_TYPE_OPTIONS.map((option) => (
               <TouchableOpacity
@@ -80,12 +80,6 @@ const OnboardingCategoryInfo = () => {
             canSelectMore={canSelectMore}
             canCreateCategory={canCreateCategory}
           />
-          <Text
-            className={`text-xs ${handleMessageAndColor.color} mt-2
-            `}
-          >
-            {handleMessageAndColor.message}
-          </Text>
         </KeyboardAwareScrollView>
         <View className="py-10 w-full flex justify-center items-center">
           <Button

@@ -20,7 +20,7 @@ const useSetPassword = () => {
   }>();
   const router = useRouter();
   const showToast = useShowToast();
-  const { setAuthTokensAndExpiry } = useAuth();
+  const { setAuthTokens } = useAuth();
   const { notificationHaptics } = useHaptics();
   const {
     control,
@@ -39,12 +39,7 @@ const useSetPassword = () => {
         type: "success",
       });
       notificationHaptics("success");
-      setAuthTokensAndExpiry(
-        data.result.accessToken,
-        data.result.refreshToken,
-        data.result.accessTokenExpiresAt,
-        data.result.refreshTokenExpiresAt,
-      );
+      await setAuthTokens(data.result.accessToken, data.result.refreshToken);
 
       router.replace({
         pathname: "/(onboarding)",

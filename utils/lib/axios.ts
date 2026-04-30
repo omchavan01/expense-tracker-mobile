@@ -9,36 +9,40 @@ const axiosInstance = axios.create({
 
 let isRefreshing = false;
 let failedQueue: {
-  resolve: (token: string) => void;
+  resolve: (tokens: { accessToken: string; refreshToken: string }) => void;
   reject: (err: any) => void;
 }[] = [];
-
 let getTokenFromContext:
   | (() => { accessToken: string; refreshToken: string } | null)
   | null = null;
-let handleUnauthorized: (() => Promise<string>) | null = null;
-let logoutUnauthorized: (() => Promise<void>) | null = null;
+let handleTokens:
+  | (() => Promise<{ accessToken: string; refreshToken: string }>)
+  | null = null;
+let handleLogout: (() => Promise<void>) | null = null;
 
 export const setTokenGetter = (
   getter: () => { accessToken: string; refreshToken: string } | null,
 ) => {
   getTokenFromContext = getter;
 };
-
-export const setHandleUnauthorized = (callback: () => Promise<string>) => {
-  handleUnauthorized = callback;
+export const setHandleTokens = (
+  callback: () => Promise<{ accessToken: string; refreshToken: string }>,
+) => {
+  handleTokens = callback;
+};
+export const setHandleLogout = (callback: () => Promise<void>) => {
+  handleLogout = callback;
 };
 
-export const setLogoutUnauthorized = (callback: () => Promise<void>) => {
-  logoutUnauthorized = callback;
-};
-
-const processQueue = (error: any, token: string | null = null) => {
+const processQueue = (
+  error: any,
+  tokens: { accessToken: string; refreshToken: string } | null = null,
+) => {
   failedQueue.forEach((prom) => {
     if (error) {
       prom.reject(error);
     } else {
-      prom.resolve(token!);
+      prom.resolve(tokens!);
     }
   });
   failedQueue = [];
@@ -77,9 +81,9 @@ axiosInstance.interceptors.response.use(
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({
-            resolve: (token: string) => {
+            resolve: (tokens) => {
               originalRequest.headers = originalRequest.headers ?? {};
-              originalRequest.headers.Authorization = `Bearer ${token}`;
+              originalRequest.headers.Authorization = `Bearer ${tokens.accessToken}`;
               resolve(axiosInstance(originalRequest));
             },
             reject: (err: any) => reject(err),
@@ -91,18 +95,14 @@ axiosInstance.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        if (!handleUnauthorized) {
-          await logoutUnauthorized?.();
-          return Promise.reject(error);
-        }
-        const newToken = await handleUnauthorized?.();
-        processQueue(null, newToken);
+        const tokens = await handleTokens?.();
+        processQueue(null, tokens);
         originalRequest.headers = originalRequest.headers ?? {};
-        originalRequest.headers.Authorization = `Bearer ${newToken}`;
+        originalRequest.headers.Authorization = `Bearer ${tokens?.accessToken}`;
         return axiosInstance(originalRequest);
       } catch (err) {
         processQueue(err, null);
-        await logoutUnauthorized?.();
+        await handleLogout?.();
         return Promise.reject(err);
       } finally {
         isRefreshing = false;

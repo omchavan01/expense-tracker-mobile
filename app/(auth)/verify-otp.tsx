@@ -5,6 +5,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { OtpInput } from "react-native-otp-entry";
 
 import { Button, ButtonText, ButtonSpinner } from "@/components/ui/button";
+import Header from "@/components/common/header";
 import NoInternet from "@/components/common/no-internet";
 import useVerifyOTP from "@/hooks/auth/use-verify-otp";
 import { useNetInfo } from "@/contexts/net-info-provider";
@@ -57,7 +58,7 @@ const VerifyOTP = () => {
           contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
           showsVerticalScrollIndicator={false}
         >
-          <Text className="text-2xl font-bold mb-12">Verify OTP</Text>
+          <Header title="Verify OTP" />
           <OtpInput
             numberOfDigits={4}
             onTextChange={(value) => {

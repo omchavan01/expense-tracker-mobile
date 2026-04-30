@@ -1,9 +1,10 @@
-import { StatusBar, Text, View } from "react-native";
+import { StatusBar, View } from "react-native";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 
 import { Button, ButtonText, ButtonSpinner } from "@/components/ui/button";
+import Header from "@/components/common/header";
 import FormController from "@/components/common/controllers/form-controller";
 import NoInternet from "@/components/common/no-internet";
 import useLogin from "@/hooks/auth/use-login";
@@ -26,7 +27,7 @@ const Login = () => {
           contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
           showsVerticalScrollIndicator={false}
         >
-          <Text className="text-2xl font-bold mb-10">Login</Text>
+          <Header title="Login" />
           <View className="flex flex-col gap-4">
             <FormController
               control={control}

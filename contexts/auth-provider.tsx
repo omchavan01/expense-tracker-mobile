@@ -1,12 +1,11 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import axios from "axios";
 
 import axiosInstance, {
   setTokenGetter,
-  setHandleUnauthorized,
-  setLogoutUnauthorized,
+  setHandleTokens,
+  setHandleLogout,
 } from "@/utils/lib/axios";
 import {
   deleteSecureStoreKey,
@@ -20,12 +19,7 @@ interface AuthContextType {
   loading: boolean;
   user: User | null;
   setUserData: (userData: any, isAuthenticated: boolean) => void;
-  setAuthTokensAndExpiry: (
-    accessToken: string,
-    refreshToken: string,
-    accessTokenExpiresAt: string,
-    refreshTokenExpiresAt: string,
-  ) => Promise<void>;
+  setAuthTokens: (accessToken: string, refreshToken: string) => Promise<void>;
   login: () => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -52,52 +46,42 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     });
   };
 
-  const refreshAccessToken = async () => {
+  useEffect(() => {
+    loadUser();
+  }, []);
+
+  useEffect(() => {
+    setHandleTokens(() => refreshTokens());
+  }, []);
+
+  useEffect(() => {
+    setHandleLogout(() => logout());
+  }, []);
+
+  const refreshTokens = async () => {
     const refreshToken = await getSecureStoreKey("refreshToken");
-
+    if (!refreshToken) {
+      throw new Error("No refresh token");
+    }
     const baseURL = process.env.EXPO_PUBLIC_API_URL;
-
     const { data } = await axios.post(`${baseURL}/auth/refresh-token`, {
       refreshToken,
     });
-    await setAuthTokensAndExpiry(
-      data.result.accessToken,
-      data.result.refreshToken,
-      data.result.accessTokenExpiresAt,
-      data.result.refreshTokenExpiresAt,
-    );
-    return data.result.accessToken;
+    await setAuthTokens(data.result.accessToken, data.result.refreshToken);
+    return {
+      accessToken: data.result.accessToken,
+      refreshToken: data.result.refreshToken,
+    };
   };
 
   const loadUser = async () => {
     try {
       setLoading(true);
-      const [
-        accessToken,
-        refreshToken,
-        accessTokenExpiresAt,
-        refreshTokenExpiresAt,
-      ] = await Promise.all([
+      const [accessToken, refreshToken] = await Promise.all([
         getSecureStoreKey("accessToken"),
         getSecureStoreKey("refreshToken"),
-        getSecureStoreKey("accessTokenExpiresAt"),
-        getSecureStoreKey("refreshTokenExpiresAt"),
       ]);
-
-      if (!accessToken || !refreshToken) return;
-
-      await setAuthTokensAndExpiry(
-        accessToken,
-        refreshToken,
-        accessTokenExpiresAt!,
-        refreshTokenExpiresAt!,
-      );
-
-      // Refresh access token if it is expired within 1 minute
-      if (Date.now() >= new Date(accessTokenExpiresAt!).getTime() - 60_000) {
-        await refreshAccessToken();
-      }
-
+      await setAuthTokens(accessToken!, refreshToken!);
       const { data } = await axiosInstance.get("/users/info");
       setUserData(data.result.user, true);
     } catch (error) {
@@ -108,36 +92,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  useEffect(() => {
-    loadUser();
-  }, []);
-
-  useEffect(() => {
-    setHandleUnauthorized(() => refreshAccessToken());
-  }, []);
-
-  useEffect(() => {
-    setLogoutUnauthorized(() => logout());
-  }, []);
-
-  const setAuthTokensAndExpiry = async (
-    accessToken: string,
-    refreshToken: string,
-    accessTokenExpiresAt: string,
-    refreshTokenExpiresAt: string,
-  ) => {
-    await Promise.all([
-      setSecureStoreKey("accessToken", accessToken),
-      setSecureStoreKey("refreshToken", refreshToken),
-      setSecureStoreKey("accessTokenExpiresAt", accessTokenExpiresAt),
-      setSecureStoreKey("refreshTokenExpiresAt", refreshTokenExpiresAt),
-    ]);
+  const setAuthTokens = async (accessToken: string, refreshToken: string) => {
     setTokenGetter(() => ({
       accessToken,
       refreshToken,
-      accessTokenExpiresAt,
-      refreshTokenExpiresAt,
     }));
+    await Promise.all([
+      setSecureStoreKey("accessToken", accessToken),
+      setSecureStoreKey("refreshToken", refreshToken),
+    ]);
   };
 
   const login = async () => {
@@ -155,8 +118,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     await Promise.all([
       deleteSecureStoreKey("accessToken"),
       deleteSecureStoreKey("refreshToken"),
-      deleteSecureStoreKey("accessTokenExpiresAt"),
-      deleteSecureStoreKey("refreshTokenExpiresAt"),
     ]);
   };
 
@@ -177,7 +138,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         loading,
         user,
         setUserData,
-        setAuthTokensAndExpiry,
+        setAuthTokens,
         login,
         logout,
       }}

@@ -1,9 +1,10 @@
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 
-import FormController from "@/components/common/controllers/form-controller";
 import { Button, ButtonText, ButtonSpinner } from "@/components/ui/button";
+import Header from "@/components/common/header";
+import FormController from "@/components/common/controllers/form-controller";
 import NoInternet from "@/components/common/no-internet";
 import useSetPassword from "@/hooks/auth/use-set-password";
 import { useHaptics } from "@/utils/lib/haptics";
@@ -30,7 +31,7 @@ const SetPassword = () => {
           contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
           showsVerticalScrollIndicator={false}
         >
-          <Text className="text-2xl font-bold mb-10">Set Your Password</Text>
+          <Header title="Set Your Password" />
           <View className="flex flex-col gap-4">
             <FormController
               control={control}

@@ -1,9 +1,10 @@
 import React, { useRef } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import BottomSheet from "@gorhom/bottom-sheet";
 
 import { Button, ButtonText, ButtonSpinner } from "@/components/ui/button";
+import Header from "@/components/common/header";
 import FormController from "@/components/common/controllers/form-controller";
 import DropdownController from "@/components/common/controllers/dropdown-controller";
 import NoInternet from "@/components/common/no-internet";
@@ -35,7 +36,7 @@ const OnboardingBasicInfo = () => {
           contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
           showsVerticalScrollIndicator={false}
         >
-          <Text className="text-2xl font-bold mb-10">Basic Information</Text>
+          <Header title="Basic Information" />
           <View className="flex flex-col gap-4">
             <FormController
               control={control}

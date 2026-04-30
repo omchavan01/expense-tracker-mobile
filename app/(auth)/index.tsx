@@ -17,8 +17,8 @@ const AuthIndex = () => {
   return (
     <SafeAreaView className="flex-1 bg-primary-950">
       <StatusBar barStyle="light-content" backgroundColor="#321A5C" />
-      <View className="flex-1 items-center justify-center">
-        <Text className="text-white text-2xl absolute top-24 font-semibold">
+      <View className="flex-1 items-center justify-center py-28">
+        <Text className="text-white text-2xl font-semibold">
           Take Control of Your Finances
         </Text>
         <LottieView
@@ -30,7 +30,7 @@ const AuthIndex = () => {
             height: "100%",
           }}
         />
-        <View className="absolute bottom-12 w-full flex flex-col gap-5 items-center">
+        <View className="w-full flex flex-col gap-5 items-center">
           <Button
             variant="solid"
             size="xl"
