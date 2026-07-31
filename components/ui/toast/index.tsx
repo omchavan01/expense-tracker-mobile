@@ -2,7 +2,8 @@
 import React from "react";
 import { createToastHook } from "@gluestack-ui/core/toast/creator";
 import { AccessibilityInfo, Text, View, ViewStyle } from "react-native";
-import { tva ,
+import {
+  tva,
   withStyleContext,
   useStyleContext,
 } from "@gluestack-ui/utils/nativewind-utils";
@@ -158,7 +159,7 @@ type IToastProps = React.ComponentProps<typeof Root> & {
 const Toast = React.forwardRef<React.ComponentRef<typeof Root>, IToastProps>(
   function Toast(
     { className, variant = "solid", action = "muted", ...props },
-    ref
+    ref,
   ) {
     return (
       <Root
@@ -168,7 +169,7 @@ const Toast = React.forwardRef<React.ComponentRef<typeof Root>, IToastProps>(
         {...props}
       />
     );
-  }
+  },
 );
 
 type IToastTitleProps = React.ComponentProps<typeof Text> & {

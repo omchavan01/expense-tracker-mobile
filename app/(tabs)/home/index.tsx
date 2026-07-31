@@ -1,24 +1,9 @@
 import { Text, View, Pressable } from "react-native";
 
 import { useTheme } from "@/contexts/theme-provider";
-import { getErrorMessage } from "@/utils/lib/error-helper";
-import axiosInstance from "@/utils/lib/axios";
-import { useEffect } from "react";
 
 const HomeIndex = () => {
   const { toggleTheme, theme } = useTheme();
-  const login = async () => {
-    try {
-      const { data } = await axiosInstance.get("/users/info");
-      console.log(data, "user data");
-    } catch (error) {
-      console.log(getErrorMessage(error), "error");
-    }
-  };
-
-  useEffect(() => {
-    login();
-  }, [theme]);
 
   return (
     <View className="flex-1 px-4 bg-background-0">

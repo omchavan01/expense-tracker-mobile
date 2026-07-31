@@ -1,11 +1,12 @@
 import React from "react";
-import { createIcon ,
+import {
+  createIcon,
   PrimitiveIcon,
   IPrimitiveIcon,
   Svg,
 } from "@gluestack-ui/core/icon/creator";
 import { Path } from "react-native-svg";
-import { tva , VariantProps } from "@gluestack-ui/utils/nativewind-utils";
+import { tva, VariantProps } from "@gluestack-ui/utils/nativewind-utils";
 import { cssInterop } from "nativewind";
 
 export const UIIcon = createIcon({
@@ -76,7 +77,7 @@ const Icon = React.forwardRef<React.ComponentRef<typeof UIIcon>, IIConProps>(
         className={iconStyle({ size, class: className })}
       />
     );
-  }
+  },
 );
 
 export { Icon };
@@ -99,7 +100,7 @@ const createIconUI = ({ ...props }: ParameterTypes) => {
       ...inComingProps
     }: VariantProps<typeof iconStyle> &
       React.ComponentPropsWithoutRef<typeof UIIconCreateIcon>,
-    ref
+    ref,
   ) {
     return (
       <UIIconCreateIcon

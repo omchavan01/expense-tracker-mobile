@@ -290,7 +290,7 @@ const Button = React.forwardRef<
 >(
   (
     { className, variant = "solid", size = "md", action = "primary", ...props },
-    ref
+    ref,
   ) => {
     return (
       <UIButton
@@ -300,7 +300,7 @@ const Button = React.forwardRef<
         context={{ variant, size, action }}
       />
     );
-  }
+  },
 );
 
 type IButtonTextProps = React.ComponentPropsWithoutRef<typeof UIButton.Text> &
@@ -408,7 +408,7 @@ const ButtonGroup = React.forwardRef<
       flexDirection = "column",
       ...props
     },
-    ref
+    ref,
   ) => {
     return (
       <UIButton.Group
@@ -422,7 +422,7 @@ const ButtonGroup = React.forwardRef<
         ref={ref}
       />
     );
-  }
+  },
 );
 
 Button.displayName = "Button";

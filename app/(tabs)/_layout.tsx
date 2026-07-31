@@ -3,7 +3,6 @@ import { Tabs, useRouter } from "expo-router";
 import { useNavigationState } from "@react-navigation/native";
 import type { BottomTabBarButtonProps } from "@react-navigation/bottom-tabs";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import {
   ChartNoAxesCombined,
   Landmark,
@@ -51,7 +50,10 @@ const CustomTabBarButton = ({
   };
 
   return (
-    <Pressable className="items-center" onPress={handlePress}>
+    <Pressable
+      className="flex-1 items-center justify-center"
+      onPress={handlePress}
+    >
       {children}
     </Pressable>
   );
@@ -59,23 +61,33 @@ const CustomTabBarButton = ({
 
 const TabsLayout = () => {
   const { theme } = useTheme();
+
   return (
     <>
       <StatusBar
-        barStyle={theme === ThemeEnum.LIGHT ? "light-content" : "dark-content"}
+        barStyle={theme === ThemeEnum.LIGHT ? "dark-content" : "light-content"}
+        backgroundColor={theme === ThemeEnum.LIGHT ? "white" : "black"}
       />
-      <SafeAreaView className="flex-1 bg-background-0">
+      <SafeAreaView
+        edges={["top", "left", "right"]}
+        className="flex-1 bg-background-0"
+      >
         <Tabs
           screenOptions={({ route }) => ({
             headerShown: false,
             animation: "shift",
             tabBarHideOnKeyboard: true,
+            tabBarLabelStyle: {
+              fontSize: 10,
+              marginTop: 2,
+            },
+            tabBarActiveTintColor: theme === ThemeEnum.LIGHT ? "#321A5C" : "#FFF",
+            tabBarInactiveTintColor: theme === ThemeEnum.LIGHT ? "#000" : "#FFF",
             tabBarStyle: {
-              height: 0,
-              paddingTop: 12,
+              height: 90,
+              marginBottom: -10,
               borderTopColor: theme === ThemeEnum.LIGHT ? "#EFEFFE" : "#181719",
-              marginBottom: Platform.OS === "ios" ? -10 : 0,
-              backgroundColor: "bg-background-500",
+              backgroundColor: theme === ThemeEnum.LIGHT ? "white" : "black",
             },
             tabBarButton: (props: BottomTabBarButtonProps) => (
               <CustomTabBarButton {...props} routeName={route.name} />
@@ -85,7 +97,7 @@ const TabsLayout = () => {
           <Tabs.Screen
             name="home/index"
             options={{
-              title: "",
+              title: "Home",
               tabBarIcon: ({ focused }) =>
                 focused ? (
                   <LayoutDashboard
@@ -104,7 +116,7 @@ const TabsLayout = () => {
           <Tabs.Screen
             name="transactions/index"
             options={{
-              title: "",
+              title: "Spends",
               tabBarIcon: ({ focused }) =>
                 focused ? (
                   <Landmark
@@ -123,7 +135,7 @@ const TabsLayout = () => {
           <Tabs.Screen
             name="analytics/index"
             options={{
-              title: "",
+              title: "Analytics",
               tabBarIcon: ({ focused }) =>
                 focused ? (
                   <ChartNoAxesCombined
@@ -142,7 +154,7 @@ const TabsLayout = () => {
           <Tabs.Screen
             name="settings/index"
             options={{
-              title: "",
+              title: "Settings",
               tabBarIcon: ({ focused }) =>
                 focused ? (
                   <Settings
