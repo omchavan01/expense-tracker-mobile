@@ -22,7 +22,12 @@ export const useShowToast = () => {
       duration: 2000,
       render: ({ id }) => {
         return (
-          <Toast nativeID={`toast-${id}`} action={type} variant={variant}>
+          <Toast
+            nativeID={`toast-${id}`}
+            action={type}
+            variant={variant}
+            className="gap-0"
+          >
             <ToastTitle>{title}</ToastTitle>
             {description && (
               <ToastDescription size="xs">{description}</ToastDescription>

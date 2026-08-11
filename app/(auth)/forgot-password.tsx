@@ -1,10 +1,11 @@
 import { useRouter } from "expo-router";
-import { StatusBar, Text, View } from "react-native";
+import { StatusBar, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 
-import FormController from "@/components/common/controllers/form-controller";
 import { Button, ButtonText, ButtonSpinner } from "@/components/ui/button";
+import Header from "@/components/common/header";
+import FormController from "@/components/common/controllers/form-controller";
 import NoInternet from "@/components/common/no-internet";
 import useForgotPassword from "@/hooks/auth/use-forgot-password";
 import { useNetInfo } from "@/contexts/net-info-provider";
@@ -24,7 +25,7 @@ const ForgotPassword = () => {
           contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
           showsVerticalScrollIndicator={false}
         >
-          <Text className="text-2xl font-bold mb-10">Forgot Password</Text>
+          <Header title="Forgot Password" />
           <FormController
             control={control}
             name="email"

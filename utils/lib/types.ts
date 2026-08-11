@@ -142,3 +142,8 @@ export interface NewCategoryModalProps<T extends Record<string, any>> {
   handleCreateCategory: () => void | Promise<void>;
   handleClearCategoryName: () => void;
 }
+
+export interface User {
+  userData: any;
+  isAuthenticated: boolean;
+}

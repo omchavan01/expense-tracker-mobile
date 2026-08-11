@@ -4,7 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemeEnum } from "@/utils/enum/theme-enum";
 
 interface ThemeContextType {
-  theme: ThemeEnum;
+  theme: ThemeEnum | null;
   toggleTheme: () => void;
 }
 
@@ -13,11 +13,12 @@ export const ThemeContext = createContext<ThemeContextType | undefined>(
 );
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  const [theme, setTheme] = useState<ThemeEnum>(ThemeEnum.LIGHT);
+  const [theme, setTheme] = useState<ThemeEnum | null>(null);
 
   const getSavedTheme = async () => {
     const savedTheme = await AsyncStorage.getItem("theme");
-    setTheme(savedTheme as ThemeEnum);
+    if (savedTheme !== null) setTheme(savedTheme as ThemeEnum);
+    else setTheme(ThemeEnum.LIGHT);
   };
 
   useEffect(() => {

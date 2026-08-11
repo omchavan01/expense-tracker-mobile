@@ -154,7 +154,7 @@ const OnboardingCategoryBox = ({
   canCreateCategory,
 }: OnboardingCategoryBoxProps) => {
   return (
-    <View className="min-h-[350px] max-h-[40vh] w-full bg-background-50 rounded-lg p-4">
+    <View className="flex-1 min-h-[350px] max-h-[40vh] w-full bg-background-50 rounded-lg p-4">
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
@@ -181,7 +181,7 @@ const OnboardingCategoryBox = ({
         <Button
           variant="outline"
           size="sm"
-          className="border border-primary-400"
+          className="border border-primary-400 disabled:opacity-70"
           onPress={handleAddCategory}
           disabled={!canCreateCategory}
         >

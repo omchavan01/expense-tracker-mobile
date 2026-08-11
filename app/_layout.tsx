@@ -15,7 +15,7 @@ const queryClient = new QueryClient();
 const AppContent = () => {
   const { theme } = useTheme();
   return (
-    <GluestackUIProvider mode={theme}>
+    <GluestackUIProvider mode={theme!}>
       <SafeAreaProvider>
         <KeyboardProvider>
           <Slot />

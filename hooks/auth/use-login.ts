@@ -17,7 +17,7 @@ const useLogin = () => {
   const router = useRouter();
   const showToast = useShowToast();
   const { notificationHaptics } = useHaptics();
-  const { setAuthTokensAndExpiry } = useAuth();
+  const { setAuthTokens, login } = useAuth();
   const {
     control,
     handleSubmit,
@@ -30,25 +30,23 @@ const useLogin = () => {
   const onSubmit = async (payload: LoginType) => {
     try {
       const { data } = await axiosInstance.post("/auth/login", payload);
-      setAuthTokensAndExpiry(
-        data.result.accessToken,
-        data.result.refreshToken,
-        data.result.accessTokenExpiresAt,
-        data.result.refreshTokenExpiresAt,
-      );
+      await setAuthTokens(data.result.accessToken, data.result.refreshToken);
       showToast({
         title: data.message,
         type: "success",
       });
       notificationHaptics("success");
-      if (data.result.isOnboardingCompleted) router.replace("/(logged)");
-      else
+      if (data.result.isOnboardingCompleted) {
+        await login();
+        router.replace("/(tabs)/home");
+      } else {
         router.replace({
           pathname: "/(onboarding)",
           params: {
             onboardingStep: String(data.result.onboardingStep),
           },
         });
+      }
     } catch (error: any) {
       showToast({
         title: getErrorMessage(error),
