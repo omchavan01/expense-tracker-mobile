@@ -18,7 +18,7 @@ const AuthIndex = () => {
     <SafeAreaView className="flex-1 bg-primary-950">
       <StatusBar barStyle="light-content" backgroundColor="#321A5C" />
       <View className="flex-1 items-center justify-center py-28">
-        <Text className="text-white text-2xl font-semibold">
+        <Text className="text-2xl font-semibold text-white">
           Take Control of Your Finances
         </Text>
         <LottieView
@@ -30,11 +30,11 @@ const AuthIndex = () => {
             height: "100%",
           }}
         />
-        <View className="w-full flex flex-col gap-5 items-center">
+        <View className="flex w-full flex-col items-center gap-5">
           <Button
             variant="solid"
             size="xl"
-            className="rounded-full w-[75%] bg-primary-500"
+            className="w-[75%] rounded-full bg-primary-500"
             onPress={() => {
               router.push("/create-account");
             }}
@@ -48,7 +48,7 @@ const AuthIndex = () => {
           <Button
             variant="outline"
             size="xl"
-            className="rounded-full w-[75%] border-white"
+            className="w-[75%] rounded-full border-white"
             onPress={() => {
               router.push("/login");
             }}

@@ -32,7 +32,7 @@ const VerifyOTP = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTimer((prev) => {
+      setTimer(prev => {
         if (prev === "0:00") {
           return "0:00";
         }
@@ -61,7 +61,7 @@ const VerifyOTP = () => {
           <Header title="Verify OTP" />
           <OtpInput
             numberOfDigits={4}
-            onTextChange={(value) => {
+            onTextChange={value => {
               setValue("otp", value);
               if (errors.otp) {
                 clearErrors("otp");
@@ -92,15 +92,15 @@ const VerifyOTP = () => {
             }}
           />
           {errors.otp && (
-            <Text className="text-error-500 mt-4">{errors.otp.message}</Text>
+            <Text className="mt-4 text-error-500">{errors.otp.message}</Text>
           )}
         </KeyboardAwareScrollView>
-        <View className="py-10 w-full flex justify-center items-center">
+        <View className="flex w-full items-center justify-center py-10">
           <Button
             onPress={handleSubmit(onVerifyOTP)}
             variant="solid"
             size="xl"
-            className="rounded-full bg-primary-600 w-[75%]"
+            className="w-[75%] rounded-full bg-primary-600"
             disabled={isSubmitting || !isConnected}
           >
             {isSubmitting && <ButtonSpinner className="text-white" />}

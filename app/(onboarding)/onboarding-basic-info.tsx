@@ -71,12 +71,12 @@ const OnboardingBasicInfo = () => {
             />
           </View>
         </KeyboardAwareScrollView>
-        <View className="py-10 w-full flex justify-center items-center">
+        <View className="flex w-full items-center justify-center py-10">
           <Button
             onPress={handleSubmit(onSubmit)}
             variant="solid"
             size="xl"
-            className="rounded-full bg-primary-600 w-[75%]"
+            className="w-[75%] rounded-full bg-primary-600"
             disabled={isSubmitting || !isConnected}
           >
             {isSubmitting && <ButtonSpinner className="text-white" />}

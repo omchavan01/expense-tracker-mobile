@@ -41,7 +41,7 @@ const DropdownController = <T extends Record<string, any>>({
       name={name}
       render={({ field, fieldState }) => {
         const selectedOption = options?.find(
-          (option) => option.value === field.value,
+          option => option.value === field.value,
         );
         return (
           <FormControl isInvalid={!!fieldState.error}>
@@ -89,7 +89,7 @@ const DropdownController = <T extends Record<string, any>>({
                   setIsPressed(false);
                 }}
                 disabled={isDisabled}
-                className="absolute top-0 left-0 right-0 bottom-0"
+                className="absolute bottom-0 left-0 right-0 top-0"
               />
             </View>
 

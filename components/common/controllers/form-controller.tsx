@@ -60,7 +60,7 @@ const FormController = <T extends Record<string, any>>({
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
             className={cn(
-              `h-14 rounded-lg mt-2 mb-1 ${isFocus && "border border-primary-500"}`,
+              `mb-1 mt-2 h-14 rounded-lg ${isFocus && "border border-primary-500"}`,
               className,
             )}
           >
@@ -83,7 +83,7 @@ const FormController = <T extends Record<string, any>>({
               onChangeText={field.onChange}
               onBlur={field.onBlur}
               secureTextEntry={isPassword && !showPassword}
-              className="pl-3 pr-10 placeholder:text-typography-500 flex-1 h-full"
+              className="h-full flex-1 pl-3 pr-10 placeholder:text-typography-500"
               {...inputProps}
             />
 
