@@ -12,9 +12,9 @@ const Header = ({
   const router = useRouter();
 
   return (
-    <View className="flex flex-row items-center gap-2 mb-10">
+    <View className="mb-10 flex flex-row items-center gap-2">
       <TouchableOpacity
-        className="bg-white rounded-full"
+        className="rounded-full bg-white"
         onPress={() => router.back()}
       >
         <ChevronLeft size={22} />

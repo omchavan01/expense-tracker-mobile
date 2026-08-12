@@ -6,11 +6,11 @@ const HomeIndex = () => {
   const { toggleTheme, theme } = useTheme();
 
   return (
-    <View className="flex-1 px-4 bg-background-0">
+    <View className="flex-1 bg-background-0 px-4">
       <Text className="text-typography-500">Theme: {theme}</Text>
       <Pressable
         onPress={toggleTheme}
-        className="p-4 bg-secondary-500 w-40 rounded-md mt-4"
+        className="mt-4 w-40 rounded-md bg-secondary-500 p-4"
       >
         <Text>Toggle Theme</Text>
       </Pressable>

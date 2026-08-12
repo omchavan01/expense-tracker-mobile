@@ -42,11 +42,11 @@ const DatePickerSheet = ({
     >
       <View className="flex-1 px-4">
         {/* Header */}
-        <View className="flex-row justify-between items-center py-4">
-          <Text className="text-lg font-medium flex-1">Select Date</Text>
+        <View className="flex-row items-center justify-between py-4">
+          <Text className="flex-1 text-lg font-medium">Select Date</Text>
           <TouchableOpacity
             onPress={() => bottomSheetRef.current?.close()}
-            className="p-2 bg-gray-300 rounded-full"
+            className="rounded-full bg-gray-300 p-2"
           >
             <Icon as={CloseIcon} size="xl" />
           </TouchableOpacity>

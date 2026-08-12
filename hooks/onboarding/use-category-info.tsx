@@ -69,7 +69,7 @@ const useOnboardingCategoryInfo = () => {
       : setIncomeCategoryOptions;
 
   const selectedCount = useMemo(
-    () => currentOptions.filter((category) => category.isSelected).length,
+    () => currentOptions.filter(category => category.isSelected).length,
     [currentOptions],
   );
   const canUnselectOrDelete = selectedCount > config.minSelected;
@@ -92,7 +92,7 @@ const useOnboardingCategoryInfo = () => {
 
     if (
       currentOptions.find(
-        (category) =>
+        category =>
           category.value ===
           payload.categoryName.split(" ").join("-").toLowerCase(),
       )
@@ -103,7 +103,7 @@ const useOnboardingCategoryInfo = () => {
       return;
     }
     const selectNewCategory = selectedCount < config.maxSelected;
-    setCurrentOptions((prev) => {
+    setCurrentOptions(prev => {
       const newCategory = {
         label: payload.categoryName,
         value: payload.categoryName.split(" ").join("-").toLowerCase(),
@@ -125,8 +125,8 @@ const useOnboardingCategoryInfo = () => {
       });
       return;
     }
-    setCurrentOptions((prev) =>
-      prev.map((category) => ({
+    setCurrentOptions(prev =>
+      prev.map(category => ({
         ...category,
         isSelected:
           category.value === option.value ? true : category.isSelected,
@@ -143,8 +143,8 @@ const useOnboardingCategoryInfo = () => {
       });
       return;
     }
-    setCurrentOptions((prev) =>
-      prev.map((category) => ({
+    setCurrentOptions(prev =>
+      prev.map(category => ({
         ...category,
         isSelected:
           category.value === option.value ? false : category.isSelected,
@@ -161,8 +161,8 @@ const useOnboardingCategoryInfo = () => {
       });
       return;
     }
-    setCurrentOptions((prev) =>
-      prev.filter((category) => category.value !== option.value),
+    setCurrentOptions(prev =>
+      prev.filter(category => category.value !== option.value),
     );
   };
 
@@ -186,8 +186,8 @@ const useOnboardingCategoryInfo = () => {
     expensePayload: OnboardingCategoryOption[],
     incomePayload: OnboardingCategoryOption[],
   ) => {
-    const expenseSelected = expensePayload.filter((c) => c.isSelected).length;
-    const incomeSelected = incomePayload.filter((c) => c.isSelected).length;
+    const expenseSelected = expensePayload.filter(c => c.isSelected).length;
+    const incomeSelected = incomePayload.filter(c => c.isSelected).length;
 
     if (expenseSelected < CATEGORY_CONFIG.expense.minSelected) {
       showToast({
@@ -207,7 +207,7 @@ const useOnboardingCategoryInfo = () => {
       return;
     }
     const formattedPayload = {
-      categoriesInfo: [...expensePayload, ...incomePayload].map((category) => ({
+      categoriesInfo: [...expensePayload, ...incomePayload].map(category => ({
         title: category.label,
         value: category.value,
         active: category.isSelected,

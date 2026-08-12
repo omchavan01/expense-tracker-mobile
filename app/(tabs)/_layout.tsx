@@ -1,4 +1,4 @@
-import { Platform, StatusBar, Pressable } from "react-native";
+import { StatusBar, Pressable } from "react-native";
 import { Tabs, useRouter } from "expo-router";
 import { useNavigationState } from "@react-navigation/native";
 import type { BottomTabBarButtonProps } from "@react-navigation/bottom-tabs";
@@ -17,7 +17,7 @@ const CustomTabBarButton = ({
   children,
   routeName,
 }: BottomTabBarButtonProps & { routeName: string }) => {
-  const navigationState = useNavigationState((state) => state);
+  const navigationState = useNavigationState(state => state);
   const router = useRouter();
   const isFocused =
     navigationState.routes[navigationState.index]?.name === routeName;
@@ -81,8 +81,10 @@ const TabsLayout = () => {
               fontSize: 10,
               marginTop: 2,
             },
-            tabBarActiveTintColor: theme === ThemeEnum.LIGHT ? "#321A5C" : "#FFF",
-            tabBarInactiveTintColor: theme === ThemeEnum.LIGHT ? "#000" : "#FFF",
+            tabBarActiveTintColor:
+              theme === ThemeEnum.LIGHT ? "#321A5C" : "#FFF",
+            tabBarInactiveTintColor:
+              theme === ThemeEnum.LIGHT ? "#000" : "#FFF",
             tabBarStyle: {
               height: 90,
               marginBottom: -10,

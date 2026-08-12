@@ -47,21 +47,21 @@ const OnboardingCategoryInfo = () => {
           showsVerticalScrollIndicator={false}
         >
           <Header title="Category Information" />
-          <View className="flex flex-row items-center justify-between bg-gray-100 rounded-full mb-4">
-            {CATEGORY_TYPE_OPTIONS.map((option) => (
+          <View className="mb-4 flex flex-row items-center justify-between rounded-full bg-gray-100">
+            {CATEGORY_TYPE_OPTIONS.map(option => (
               <TouchableOpacity
                 key={option.value}
                 className={`flex ${
                   categoryType === option.value
                     ? "flex-[1.2] bg-primary-600"
                     : "flex-1"
-                } p-3 rounded-full items-center justify-center`}
+                } items-center justify-center rounded-full p-3`}
                 onPress={() => handleCategoryTypeSelect(option.value)}
               >
                 <Text
                   className={`${
                     categoryType === option.value
-                      ? "text-white font-medium"
+                      ? "font-medium text-white"
                       : "text-typography-400"
                   }`}
                 >
@@ -81,14 +81,14 @@ const OnboardingCategoryInfo = () => {
             canCreateCategory={canCreateCategory}
           />
         </KeyboardAwareScrollView>
-        <View className="py-10 w-full flex justify-center items-center">
+        <View className="flex w-full items-center justify-center py-10">
           <Button
             onPress={() =>
               onSubmit(expenseCategoryOptions, incomeCategoryOptions)
             }
             variant="solid"
             size="xl"
-            className="rounded-full bg-primary-600 w-[75%]"
+            className="w-[75%] rounded-full bg-primary-600"
             disabled={!isConnected || isSubmitting}
           >
             {isSubmitting && <ButtonSpinner className="text-white" />}

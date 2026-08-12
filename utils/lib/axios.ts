@@ -1,6 +1,6 @@
-import axios from "axios";
+import { create } from "axios";
 
-const axiosInstance = axios.create({
+const axiosInstance = create({
   baseURL: process.env.EXPO_PUBLIC_API_URL,
   headers: {
     "Content-Type": "application/json",
@@ -13,11 +13,9 @@ let failedQueue: {
   reject: (err: any) => void;
 }[] = [];
 let getTokenFromContext:
-  | (() => { accessToken: string; refreshToken: string } | null)
-  | null = null;
+  (() => { accessToken: string; refreshToken: string } | null) | null = null;
 let handleTokens:
-  | (() => Promise<{ accessToken: string; refreshToken: string }>)
-  | null = null;
+  (() => Promise<{ accessToken: string; refreshToken: string }>) | null = null;
 let handleLogout: (() => Promise<void>) | null = null;
 
 export const setTokenGetter = (
@@ -38,7 +36,7 @@ const processQueue = (
   error: any,
   tokens: { accessToken: string; refreshToken: string } | null = null,
 ) => {
-  failedQueue.forEach((prom) => {
+  failedQueue.forEach(prom => {
     if (error) {
       prom.reject(error);
     } else {
@@ -49,7 +47,7 @@ const processQueue = (
 };
 
 axiosInstance.interceptors.request.use(
-  async (config) => {
+  async config => {
     if (getTokenFromContext) {
       const getToken = getTokenFromContext();
       if (getToken && getToken.accessToken) {
@@ -58,14 +56,14 @@ axiosInstance.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
+  error => {
     return Promise.reject(error);
   },
 );
 
 axiosInstance.interceptors.response.use(
-  (response) => response,
-  async (error) => {
+  response => response,
+  async error => {
     const originalRequest = error.config;
 
     if (!originalRequest) {
@@ -82,7 +80,7 @@ axiosInstance.interceptors.response.use(
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({
-            resolve: (tokens) => {
+            resolve: tokens => {
               originalRequest.headers = originalRequest.headers ?? {};
               originalRequest.headers.Authorization = `Bearer ${tokens.accessToken}`;
               resolve(axiosInstance(originalRequest));

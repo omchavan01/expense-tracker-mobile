@@ -64,7 +64,7 @@ const DropdownSheet = <T,>({
       return options;
     }
     const searchLower = search.toLowerCase();
-    return options.filter((option) =>
+    return options.filter(option =>
       option.label.toLowerCase().includes(searchLower),
     );
   }, [options, search]);
@@ -83,11 +83,11 @@ const DropdownSheet = <T,>({
     >
       <View className="flex-1 px-4">
         {/* Header */}
-        <View className="flex-row justify-between items-center py-4">
-          <Text className="text-lg font-medium flex-1">{title}</Text>
+        <View className="flex-row items-center justify-between py-4">
+          <Text className="flex-1 text-lg font-medium">{title}</Text>
           <TouchableOpacity
             onPress={() => bottomSheetRef.current?.close()}
-            className="p-2 bg-gray-300 rounded-full"
+            className="rounded-full bg-gray-300 p-2"
           >
             <Icon as={CloseIcon} size="xl" />
           </TouchableOpacity>
@@ -95,7 +95,7 @@ const DropdownSheet = <T,>({
 
         {/* Search */}
         {searchEnabled && (
-          <Input className="h-14 rounded-lg mt-2 mb-1 border border-outline-100">
+          <Input className="mb-1 mt-2 h-14 rounded-lg border border-outline-100">
             <InputSlot>
               <InputIcon as={SearchIcon} size="sm" className="left-2 mr-2" />
             </InputSlot>
@@ -115,13 +115,13 @@ const DropdownSheet = <T,>({
           <Loader />
         ) : (
           <ScrollView
-            className="flex-1 mt-4"
+            className="mt-4 flex-1"
             showsVerticalScrollIndicator={false}
           >
             <RadioGroup>
               <FlashList<DropdownOption>
                 data={filteredOptions}
-                keyExtractor={(item) => String(item.value)}
+                keyExtractor={item => String(item.value)}
                 extraData={selectedValue}
                 showsVerticalScrollIndicator={false}
                 keyboardShouldPersistTaps="handled"
@@ -130,8 +130,8 @@ const DropdownSheet = <T,>({
                   return (
                     <View
                       className={`
-                    flex-row items-center rounded-xl mb-4
-                    ${isSelected ? "bg-primary-50 border border-primary-200" : "border border-outline-50"}
+                    mb-4 flex-row items-center rounded-xl
+                    ${isSelected ? "border border-primary-200 bg-primary-50" : "border border-outline-50"}
                     `}
                     >
                       <Radio
@@ -148,7 +148,7 @@ const DropdownSheet = <T,>({
                         </RadioIndicator>
                         <RadioLabel
                           data-checked={isSelected}
-                          className={`text-base flex-1 ${isSelected && "font-medium"}`}
+                          className={`flex-1 text-base ${isSelected && "font-medium"}`}
                         >
                           {item.label}
                         </RadioLabel>

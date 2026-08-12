@@ -6,14 +6,17 @@ module.exports = defineConfig([
   expoConfig,
   eslintPluginPrettierRecommended,
   {
-    ignores: ["dist/*"],
-    rules: {
-      "prettier/prettier": [
-        "error",
-        {
-          trailingComma: "all",
-        },
-      ],
-    },
+    ignores: [
+      "dist/*",
+      "node_modules/*",
+      "ios/*",
+      "android/*",
+      "bin/*",
+      "build/*",
+      "expo-env.d.ts",
+      "nativewind-env.d.ts",
+      "bun.lock",
+      ".expo/*",
+    ],
   },
 ]);

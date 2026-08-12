@@ -17,7 +17,7 @@ export const NetInfoProvider = ({
   const [isConnected, setIsConnected] = useState<boolean>(true);
 
   useEffect(() => {
-    const unsubscribe = NetInfo.addEventListener((state) => {
+    const unsubscribe = NetInfo.addEventListener(state => {
       setIsConnected(state.isConnected!);
     });
     return () => unsubscribe();

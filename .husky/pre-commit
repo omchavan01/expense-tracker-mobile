@@ -1,0 +1,19 @@
+set -e
+
+STAGED_FILES=$(git diff --staged --name-only --diff-filter=ACMR)
+
+TS_FILES=$(echo "$STAGED_FILES" | grep -E '\.tsx?$' || true)
+LINT_FILES=$(echo "$STAGED_FILES" | grep -E '\.(js|jsx|ts|tsx)$' || true)
+FORMAT_FILES=$(echo "$STAGED_FILES" | grep -E '\.(js|jsx|ts|tsx|json|md)$' || true)
+
+if [ -n "$TS_FILES" ]; then
+  npm run ts-check
+fi
+
+if [ -n "$FORMAT_FILES" ]; then
+  npx prettier --check $FORMAT_FILES
+fi
+
+if [ -n "$LINT_FILES" ]; then
+  npx eslint $LINT_FILES
+fi
